@@ -1,4 +1,4 @@
-package pageObjects;
+package core.web.pageObjects;
 
 import core.util.WaiterWrapperClass;
 import org.openqa.selenium.WebDriver;
@@ -8,13 +8,12 @@ import org.openqa.selenium.support.PageFactory;
 
 public class SignInPage extends BasePage {
 
-
-    private static final String SIGNINPAGE_URL = "http://localhost:8080";
-
     public SignInPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
     }
+
+    private static final String SIGNINPAGE_URL = "http://localhost:8080";
 
     @FindBy(xpath = "//*[@placeholder=\"Login\"]")
     private WebElement loginField;
@@ -30,10 +29,12 @@ public class SignInPage extends BasePage {
 
     @Override
     public SignInPage openPage() {
-        driver.get(SIGNINPAGE_URL);
+        String path = "/ui/#login";
+        driver.get(SIGNINPAGE_URL + path);
         WaiterWrapperClass.waitForElement(driver, loginField);
         return this;
     }
+
     public SignInPage typeLogin(String login) {
         loginField.sendKeys(login);
         return this;

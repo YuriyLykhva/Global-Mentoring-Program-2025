@@ -3,9 +3,9 @@
 <suite name="Suite1" verbose="1">
     <parameter name="browser" value="CHROME"/>
 
-    <test name="LoginTest">
+    <test name="core.web.LoginTest">
         <classes>
-            <class name="LoginTest"/>
+            <class name="core.web.LoginTest"/>
         </classes>
     </test>
 </suite>

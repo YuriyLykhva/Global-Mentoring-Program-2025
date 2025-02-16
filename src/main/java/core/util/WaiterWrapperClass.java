@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static pageObjects.BasePage.WAIT_TIMEOUT_SECONDS;
+import static core.web.pageObjects.BasePage.WAIT_TIMEOUT_SECONDS;
 
 public class WaiterWrapperClass {
 
@@ -15,8 +15,8 @@ public class WaiterWrapperClass {
                 .until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
-    public static WebElement waitForElement(WebDriver driver, WebElement webElement) {
-        return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
+    public static void waitForElement(WebDriver driver, WebElement webElement) {
+        new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.visibilityOf(webElement));
     }
 }
