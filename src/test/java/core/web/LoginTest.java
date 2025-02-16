@@ -9,8 +9,8 @@ import core.web.pageObjects.SignInPage;
 public class LoginTest extends BaseTest {
 
     @Test
-    public void loginViaUserRole() {
-        logger.info("Starting loginViaUserRole test...");
+    public void loginTest() {
+        logger.info("Starting login test...");
 
         User user = User.createUser();
         SignInPage signInPage = new SignInPage(WebDriverHolder.getInstance().getWebDriver());
@@ -23,7 +23,7 @@ public class LoginTest extends BaseTest {
                 .getAllDashboardsTitle();
 
         Assert.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");
-        logger.info("loginViaUserRole test passed successfully!");
+        logger.info("login test passed successfully!");
 
     }
 }

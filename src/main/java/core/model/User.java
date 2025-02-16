@@ -1,7 +1,8 @@
 package core.model;
 
 import lombok.Data;
-import java.util.ResourceBundle;
+
+import static core.model.UserCreds.getTestData;
 
 @Data
 public class User {
@@ -10,12 +11,6 @@ public class User {
 
     public static User createUser() {
         return new User(getTestData("login"), getTestData("password"));
-    }
-
-    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("admin");
-
-    private static String getTestData(String key) {
-        return resourceBundle.getString(key);
     }
 
     private User(String login, String password) {
