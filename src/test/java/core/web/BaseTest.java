@@ -24,6 +24,7 @@ public class BaseTest {
         webConfiguration.setBrowserName(ConfigReader.getProperty("browser"));
         webConfiguration.setRunType(RunType.valueOf(ConfigReader.getProperty("runType")));
         webConfiguration.setBrowserVersion(ConfigReader.getProperty("browserVersion"));
+        webConfiguration.setLocalUrl(ConfigReader.getProperty("localUrl"));
         webConfiguration.setRemoteUrl(ConfigReader.getProperty("remoteUrl"));
         webConfiguration.setTimeOutSeconds(ConfigReader.getLongProperty("timeOutSeconds", 10L));
         webConfiguration.setPollingTimeOutMilliSeconds(ConfigReader.getLongProperty("pollingTimeOutMilliSeconds", 500L));
