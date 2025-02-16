@@ -1,5 +1,6 @@
 package core.web;
 
+import core.config.ConfigReader;
 import core.driver.RunType;
 import core.driver.WebConfiguration;
 import core.driver.WebDriverHolder;
@@ -16,17 +17,17 @@ public class BaseTest {
 
     public BaseTest() {
         this.webConfiguration = new WebConfiguration();
-        configureWebSettings();
+        loadConfigurationFromFile();
     }
 
-    private void configureWebSettings() {
-        webConfiguration.setBrowserName("chrome");
-        webConfiguration.setRunType(RunType.LOCAL);
-        webConfiguration.setBrowserVersion("latest");
-        webConfiguration.setRemoteUrl("");
-        webConfiguration.setTimeOutSeconds(10L);
-        webConfiguration.setPollingTimeOutMilliSeconds(500L);
-        webConfiguration.setReadTimeOutSeconds(15L);
+    private void loadConfigurationFromFile() {
+        webConfiguration.setBrowserName(ConfigReader.getProperty("browser"));
+        webConfiguration.setRunType(RunType.valueOf(ConfigReader.getProperty("runType")));
+        webConfiguration.setBrowserVersion(ConfigReader.getProperty("browserVersion"));
+        webConfiguration.setRemoteUrl(ConfigReader.getProperty("remoteUrl"));
+        webConfiguration.setTimeOutSeconds(ConfigReader.getLongProperty("timeOutSeconds", 10L));
+        webConfiguration.setPollingTimeOutMilliSeconds(ConfigReader.getLongProperty("pollingTimeOutMilliSeconds", 500L));
+        webConfiguration.setReadTimeOutSeconds(ConfigReader.getLongProperty("readTimeOutSeconds", 15L));
     }
 
     @BeforeMethod(alwaysRun = true)
