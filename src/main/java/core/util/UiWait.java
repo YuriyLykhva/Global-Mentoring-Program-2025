@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.function.Function;
 
-public class WaiterWrapperClass {
+public class UiWait {
 
     public static final Duration WAIT_TIMEOUT_SECONDS = Duration.ofSeconds(10);
 

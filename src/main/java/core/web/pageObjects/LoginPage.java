@@ -2,10 +2,9 @@ package core.web.pageObjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
-import static core.util.WaiterWrapperClass.waitForElementLocatedBy;
+import static core.util.UiWait.waitForElementLocatedBy;
 
 public class LoginPage extends BasePage {
 
@@ -22,6 +21,7 @@ public class LoginPage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
+    @Override
     public LoginPage openPage(String homePageURL) {
         driver.get(homePageURL + LOGIN_PATH);
         waitForElementLocatedBy(driver, loginButton);
@@ -29,23 +29,21 @@ public class LoginPage extends BasePage {
     }
 
     public LoginPage typeLogin(String login) {
-        waitForElementLocatedBy(driver, By.xpath(loginInputLocator)).sendKeys(login);
+        browserActions.inputText(By.xpath(loginInputLocator), login);
         return this;
     }
 
     public LoginPage typePassword(String password) {
-        waitForElementLocatedBy(driver, By.xpath(passwordInputLocator)).sendKeys(password);
+        browserActions.inputText(By.xpath(passwordInputLocator), password);
         return this;
     }
 
     public LoginPage clickLoginButton() {
-        driver.findElement(loginButton).click();
+        browserActions.click(loginButton);
         return this;
     }
 
     public String getAllDashboardsTitle() {
-        WebElement allDashboardsTitleElement = waitForElementLocatedBy(driver, By.cssSelector(allDashboardsTitle));
-        return allDashboardsTitleElement.getText();
+        return browserActions.getText(By.cssSelector(allDashboardsTitle));
     }
-
 }

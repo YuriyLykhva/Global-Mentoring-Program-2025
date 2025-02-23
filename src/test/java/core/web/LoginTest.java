@@ -24,7 +24,7 @@ public class LoginTest extends BaseTest {
                 .typeLogin(user.getLogin())
                 .typePassword(user.getPassword())
                 .clickLoginButton()
-                .getAllDashboardsTitle();
+                .getAllDashboardsTitle();//todo: this is not login page, this is dashboard page
 
         Assert.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");
         logger.info("login test passed successfully!");
