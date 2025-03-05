@@ -26,7 +26,7 @@ public abstract class AbstractDriverStrategy {
     }
 
     private WebDriver getRemoteDriver() {
-        return null;
+        throw new java.lang.UnsupportedOperationException("The method getRemoteDriver() is not implemented yet!");
     }
 
     private WebDriver getLocalDriver() {
