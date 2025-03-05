@@ -19,11 +19,25 @@ public class ConfigReader {
     }
 
     public static String getProperty(String key) {
-        return properties.getProperty(key);
+        return getProperty(key, null);
     }
-
+    
     public static long getLongProperty(String key, long defaultValue) {
-        return Long.parseLong(properties.getProperty(key, String.valueOf(defaultValue)));
+        return Long.parseLong(getProperty(key, String.valueOf(defaultValue)));
     }
-
+    
+    public static String getProperty(String key, String defaultValue) {
+        String envProp = System.getenv(key);
+        if(envProp != null){
+            return envProp;
+        }
+        String fromConfig = properties.getProperty(key);
+        if(fromConfig != null){
+            return fromConfig;
+        }
+        if(defaultValue != null){
+            return defaultValue;
+        }
+        throw new RuntimeException(String.format("Property '%s' is not defined", key));
+    }
 }
