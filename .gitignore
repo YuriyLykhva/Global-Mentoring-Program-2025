@@ -19,3 +19,5 @@ target/
 *.zip
 *.tar.gz
 *.rar
+
+local.properties
