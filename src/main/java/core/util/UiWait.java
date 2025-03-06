@@ -15,7 +15,6 @@ public class UiWait {
 
     public static final Duration WAIT_TIMEOUT_SECONDS = Duration.ofSeconds(10);
 
-
     public static WebElement waitForElementLocatedBy(WebDriver driver, By by) {
         return new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.presenceOfElementLocated(by));
