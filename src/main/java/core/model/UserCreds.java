@@ -7,8 +7,8 @@ public class UserCreds {
 
     static String getTestData(String key) {
         String value =  resourceBundle.getString(key);
-        value = value.replace("${ADMIN_LOGIN}", System.getenv("LOGIN"));
-        value = value.replace("${ADMIN_PASSWORD}", System.getenv("PASSWORD"));
+        value = value.replace("${ADMIN_LOGIN}", System.getenv("ADMIN_LOGIN"));
+        value = value.replace("${ADMIN_PASSWORD}", System.getenv("ADMIN_PASSWORD"));
         return value;
     }
 }
