@@ -4,6 +4,7 @@ import core.config.ConfigReader;
 import core.driver.RunType;
 import core.driver.WebConfiguration;
 import core.driver.WebDriverHolder;
+import core.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
@@ -14,9 +15,11 @@ public class BaseTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected WebConfiguration webConfiguration;
+//    protected User user;
 
     public BaseTest() {
         this.webConfiguration = new WebConfiguration();
+//        this.user = User.createUser();
         loadConfigurationFromFile();
     }
 
@@ -29,6 +32,8 @@ public class BaseTest {
         webConfiguration.setTimeOutSeconds(ConfigReader.getLongProperty("timeOutSeconds", 10L));
         webConfiguration.setPollingTimeOutMilliSeconds(ConfigReader.getLongProperty("pollingTimeOutMilliSeconds", 500L));
         webConfiguration.setReadTimeOutSeconds(ConfigReader.getLongProperty("readTimeOutSeconds", 15L));
+//        user.setLogin(ConfigReader.getProperty("login"));
+//        user.setPassword(ConfigReader.getProperty("password"));
     }
 
     @BeforeMethod(alwaysRun = true)
