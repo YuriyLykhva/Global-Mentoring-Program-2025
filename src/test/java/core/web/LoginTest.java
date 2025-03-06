@@ -3,6 +3,7 @@ package core.web;
 import core.driver.RunType;
 import core.driver.WebDriverHolder;
 import core.model.User;
+import core.web.pageObjects.DashboardPage;
 import core.web.pageObjects.LoginPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -18,13 +19,15 @@ public class LoginTest extends BaseTest {
 
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
+        DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
 
-        String allDashboardsTitle = loginPage
+        loginPage
                 .openPage(homePageURL)
                 .typeLogin(user.getLogin())
                 .typePassword(user.getPassword())
-                .clickLoginButton()
-                .getAllDashboardsTitle();//todo: this is not login page, this is dashboard page
+                .clickLoginButton();
+
+        String allDashboardsTitle = dashboardPage.getAllDashboardsTitle();
 
         Assert.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");
         logger.info("login test passed successfully!");

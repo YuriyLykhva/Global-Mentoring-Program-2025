@@ -12,8 +12,6 @@ public class LoginPage extends BasePage {
     private final String passwordInputLocator = "//input[@name='password']";
     private final By loginButton = By.cssSelector("button[type='submit']");
 
-    private final String allDashboardsTitle = "span[title='All Dashboards']";
-
     private static final String LOGIN_PATH = "/ui/#login";
 
     public LoginPage(WebDriver driver) {
@@ -43,7 +41,4 @@ public class LoginPage extends BasePage {
         return this;
     }
 
-    public String getAllDashboardsTitle() {
-        return browserActions.getText(By.cssSelector(allDashboardsTitle));
-    }
 }
