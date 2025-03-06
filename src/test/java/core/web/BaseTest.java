@@ -1,10 +1,10 @@
 package core.web;
 
-import core.config.ConfigReader;
+import core.config.ConfigProperties;
+import core.config.PropertiesHolder;
 import core.driver.RunType;
 import core.driver.WebConfiguration;
 import core.driver.WebDriverHolder;
-import core.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
@@ -15,26 +15,23 @@ public class BaseTest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected WebConfiguration webConfiguration;
-//    protected User user;
 
     public BaseTest() {
         this.webConfiguration = new WebConfiguration();
-//        this.user = User.createUser();
         loadConfigurationFromFile();
     }
 
-    private void loadConfigurationFromFile() {
-        webConfiguration.setBrowserName(ConfigReader.getProperty("browser"));
-        webConfiguration.setRunType(RunType.valueOf(ConfigReader.getProperty("runType")));
-        webConfiguration.setBrowserVersion(ConfigReader.getProperty("browserVersion"));
-        webConfiguration.setLocalUrl(ConfigReader.getProperty("localUrl"));
-        webConfiguration.setRemoteUrl(ConfigReader.getProperty("remoteUrl"));
-        webConfiguration.setTimeOutSeconds(ConfigReader.getLongProperty("timeOutSeconds", 10L));
-        webConfiguration.setPollingTimeOutMilliSeconds(ConfigReader.getLongProperty("pollingTimeOutMilliSeconds", 500L));
-        webConfiguration.setReadTimeOutSeconds(ConfigReader.getLongProperty("readTimeOutSeconds", 15L));
-//        user.setLogin(ConfigReader.getProperty("login"));
-//        user.setPassword(ConfigReader.getProperty("password"));
-    }
+private void loadConfigurationFromFile() {
+    ConfigProperties config = PropertiesHolder.getInstance().getConfigProperties();
+    webConfiguration.setBrowserName(config.browser());
+    webConfiguration.setRunType(RunType.valueOf(config.runType()));
+    webConfiguration.setBrowserVersion(config.browserVersion());
+    webConfiguration.setLocalUrl(config.localUrl());
+    webConfiguration.setRemoteUrl(config.remoteUrl());
+    webConfiguration.setTimeOutSeconds(config.timeOutSeconds());
+    webConfiguration.setPollingTimeOutMilliSeconds(config.pollingTimeOutMilliSeconds());
+    webConfiguration.setReadTimeOutSeconds(config.readTimeOutSeconds());
+}
 
     @BeforeMethod(alwaysRun = true)
     public void beforeEachMethodSetupWeb() {
