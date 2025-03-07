@@ -5,13 +5,16 @@ import core.driver.WebDriverHolder;
 import core.model.User;
 import core.web.pageObjects.DashboardPage;
 import core.web.pageObjects.LoginPage;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testng.Assert;
-import org.testng.annotations.Test;
 
 public class LoginTest extends BaseTest {
 
     @Test
+    @org.testng.annotations.Test
     public void loginTest() {
+
         logger.info("Starting login test...");
         final String homePageURL = webConfiguration.getRunType() == RunType.LOCAL ?
                 webConfiguration.getLocalUrl() :
@@ -30,6 +33,7 @@ public class LoginTest extends BaseTest {
         String allDashboardsTitle = dashboardPage.getAllDashboardsTitle();
 
         Assert.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");
+        Assertions.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");
         logger.info("login test passed successfully!");
 
     }
