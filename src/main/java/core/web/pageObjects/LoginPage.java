@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
-import static core.util.UiWait.waitForElementLocatedBy;
+import static core.utils.UiWait.waitForElementLocatedBy;
 
 public class LoginPage extends BasePage {
 

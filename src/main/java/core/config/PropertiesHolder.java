@@ -1,11 +1,8 @@
 package core.config;
 
 import org.aeonbits.owner.ConfigFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class PropertiesHolder {
-    private static final Logger LOG = LoggerFactory.getLogger(PropertiesHolder.class);
     private static volatile PropertiesHolder instance = null;
     private ConfigProperties configProperties;
 

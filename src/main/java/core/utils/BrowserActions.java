@@ -1,4 +1,4 @@
-package core.util;
+package core.utils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

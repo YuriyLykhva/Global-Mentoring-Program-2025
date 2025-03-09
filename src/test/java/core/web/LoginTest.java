@@ -15,7 +15,6 @@ public class LoginTest extends BaseTest {
     @org.testng.annotations.Test
     public void loginTest() {
 
-        logger.info("Starting login test...");
         final String homePageURL = webConfiguration.getRunType() == RunType.LOCAL ?
                 webConfiguration.getLocalUrl() :
                 webConfiguration.getRemoteUrl();
@@ -34,7 +33,6 @@ public class LoginTest extends BaseTest {
 
         Assert.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");
         Assertions.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");
-        logger.info("login test passed successfully!");
 
     }
 }

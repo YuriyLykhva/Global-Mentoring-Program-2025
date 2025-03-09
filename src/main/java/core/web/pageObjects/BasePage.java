@@ -1,7 +1,7 @@
 package core.web.pageObjects;
 
 import core.driver.WebDriverHolder;
-import core.util.BrowserActions;
+import core.utils.BrowserActions;
 import org.openqa.selenium.WebDriver;
 
 public abstract class BasePage {

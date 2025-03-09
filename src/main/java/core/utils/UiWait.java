@@ -1,4 +1,4 @@
-package core.util;
+package core.utils;
 
 import core.driver.WebDriverHolder;
 import org.openqa.selenium.By;
