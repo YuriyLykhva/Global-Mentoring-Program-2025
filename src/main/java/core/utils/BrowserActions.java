@@ -3,6 +3,9 @@ package core.utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import java.util.List;
 
 public class BrowserActions {
 
@@ -37,6 +40,15 @@ public class BrowserActions {
 
     public String getText(WebElement element) {
         return element.getText();
+    }
+
+    public List<WebElement> getWebElements(By by) {
+        return uiWait.until(wd -> wd.findElements(by), "Find list of elements by locator: **%s**", by);
+    }
+
+    public BrowserActions waitUntilElementBeVisible(By locator) {
+        uiWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator), "Wait until the element **%s** be visible", locator);
+        return this;
     }
 
 }
