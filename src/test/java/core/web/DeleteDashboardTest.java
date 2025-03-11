@@ -1,5 +1,7 @@
 package core.web;
 
+import com.github.javafaker.Faker;
+import core.api.DashboardApiTests;
 import core.driver.RunType;
 import core.driver.WebDriverHolder;
 import core.model.User;
@@ -16,7 +18,7 @@ public class DeleteDashboardTest extends BaseTest {
 
     @Test
     @org.testng.annotations.Test
-    public void deleteFirstDashboardTest() {
+    public void deleteDashboardTest() {
         final String homePageURL = webConfiguration.getRunType() == RunType.LOCAL ?
                 webConfiguration.getLocalUrl() :
                 webConfiguration.getRemoteUrl();
@@ -24,25 +26,29 @@ public class DeleteDashboardTest extends BaseTest {
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
         DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
 
+        String targetDashboardName = new Faker().color().name();
+
         loginPage
                 .openPage(homePageURL)
                 .typeLogin(user.getLogin())
                 .typePassword(user.getPassword())
                 .clickLoginButton();
 
-        List<WebElement> dashboardsBeforeDeleting = dashboardPage.getDasboardsList();
+        List<WebElement> dashboardsBeforeTest = dashboardPage.getDasboardsList();
 
-        List<WebElement> dashboardsAfterDeleting = dashboardPage
-                .clickDeleteFirstDashboardButton()
-                .clickConfirmDeleteButton()
+        DashboardApiTests dashboardApi = new DashboardApiTests();
+        dashboardApi.createDashboardTest(targetDashboardName);
+
+        List<WebElement> dashboardsAfterTest = dashboardPage
+                .deleteDashboardByName(targetDashboardName)
                 .returnToDashboardPage()
                 .getDasboardsList();
 
-        Assert.assertEquals(dashboardsAfterDeleting.size(),
-                dashboardsBeforeDeleting.size() - 1, "Dashboard is not deleted!");
+        Assert.assertEquals(dashboardsAfterTest.size(),
+                dashboardsBeforeTest.size(), "Dashboard is not deleted!");
 
-        Assertions.assertEquals(dashboardsAfterDeleting.size(),
-                dashboardsBeforeDeleting.size() - 1, "Dashboard is not deleted!");
+        Assertions.assertEquals(dashboardsAfterTest.size(),
+                dashboardsBeforeTest.size(), "Dashboard is not deleted!");
 
     }
 }

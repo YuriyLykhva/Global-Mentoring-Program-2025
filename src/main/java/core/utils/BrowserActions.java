@@ -1,6 +1,8 @@
 package core.utils;
 
+import core.driver.WebDriverHolder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -48,6 +50,35 @@ public class BrowserActions {
 
     public BrowserActions waitUntilElementBeVisible(By locator) {
         uiWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator), "Wait until the element **%s** be visible", locator);
+        return this;
+    }
+
+    public BrowserActions waitUntilElementBeClickable(By locator) {
+        uiWait.until(ExpectedConditions.elementToBeClickable(locator), "Wait until the element **%s** be clickable", locator);
+        return this;
+    }
+
+    public List<WebElement> waitUntilElementsListIsNotEmpty(By locator) {
+        return uiWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator), "Wait until the elements **%s** list is not empty", locator);
+    }
+
+    public BrowserActions scrollToElement(WebElement element) {
+        JavascriptExecutor jse = WebDriverHolder.getInstance().getJsExecutor();
+        int x = element.getLocation().getX();
+        int y = element.getLocation().getY();
+        jse.executeScript(String.format("window.scrollTo(%s,%s)", x, y));
+        return this;
+    }
+
+    public BrowserActions jsClick(By by) {
+        WebElement element = getWebElement(by);
+        String clickScript = "arguments[0].click()";
+        WebDriverHolder.getInstance().getJsExecutor().executeScript(clickScript, element);
+        return this;
+    }
+
+    public BrowserActions refreshPage() {
+        WebDriverHolder.getInstance().getWebDriver().navigate().refresh();
         return this;
     }
 

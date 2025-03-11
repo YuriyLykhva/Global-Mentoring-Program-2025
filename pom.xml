@@ -32,6 +32,10 @@
         <logback.version>1.5.16</logback.version>
         <owner.version>1.0.12</owner.version>
         <junit.version>5.11.4</junit.version>
+
+        <javafaker.version>1.0.2</javafaker.version>
+        <rest-assured.version>5.5.0</rest-assured.version>
+        <jackson-databind.version>2.18.2</jackson-databind.version>
     </properties>
 
     <dependencies>
@@ -129,7 +133,17 @@
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
-            <version>1.0.2</version>
+            <version>${javafaker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
         </dependency>
 
     </dependencies>
@@ -150,12 +164,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
                     <parallel>methods</parallel>
-                    <threadCount>5</threadCount>
-                    <perCoreThreadCount>false</perCoreThreadCount>
+                    <threadCount>10</threadCount>
                 </configuration>
             </plugin>
 

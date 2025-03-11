@@ -16,7 +16,7 @@ public class DashboardPage extends BasePage {
     private final String allDashboardsPage = "//*[text()='All Dashboards']";
     private final String dashboardsList = "//*[contains(@class, 'gridRow__grid-row-wrapper')]";
 
-    private final String deleteFirstDashboardButton = "(//i[contains(@class, 'icon__icon-delete')])[1]";
+    private final String deleteDashboardButton = "(//i[contains(@class, 'icon__icon-delete')])[1]";
     private final String confirmDeleteButton = "//button[text()='Delete']";
 
 
@@ -45,34 +45,22 @@ public class DashboardPage extends BasePage {
     }
 
     public DashboardPage returnToDashboardPage() {
-        //todo: add wait
-//        browserActions.waitUntilElementBeVisible(By.xpath(allDashboardsPage));
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-//        waitForElementLocatedBy(driver, (By.xpath(allDashboardsPage)));
+        browserActions.waitUntilElementBeVisible(By.xpath(allDashboardsPage));
         browserActions.click(By.xpath(allDashboardsPage));
         return this;
     }
 
     public List<WebElement> getDasboardsList() {
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        return browserActions.getWebElements(By.xpath(dashboardsList));
+        return browserActions.waitUntilElementsListIsNotEmpty(By.xpath(dashboardsList));
     }
 
-    public DashboardPage clickDeleteFirstDashboardButton() {
-        browserActions.click(By.xpath(deleteFirstDashboardButton));
-        return this;
-    }
-
-    public DashboardPage clickConfirmDeleteButton() {
+    public DashboardPage deleteDashboardByName(String dashboardName) {
+        String deleteDashboardByNameButton =
+                "//*[text()='" + dashboardName + "']//following-sibling::div//i[contains(@class, 'icon__icon-delete')]";
+        browserActions.refreshPage();
+        browserActions.jsClick(By.xpath(deleteDashboardByNameButton));
         browserActions.click(By.xpath(confirmDeleteButton));
         return this;
     }
+
 }
