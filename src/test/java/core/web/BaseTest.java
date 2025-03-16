@@ -25,6 +25,7 @@ public class BaseTest {
     private void loadConfigurationFromFile() {
         ConfigProperties config = PropertiesHolder.getInstance().getConfigProperties();
         webConfiguration.setBrowserName(config.browser());
+        webConfiguration.setToken(config.token());
         webConfiguration.setRunType(RunType.valueOf(config.runType()));
         webConfiguration.setBrowserVersion(config.browserVersion());
         webConfiguration.setLocalUrl(config.localUrl());

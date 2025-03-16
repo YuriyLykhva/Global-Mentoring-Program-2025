@@ -9,11 +9,14 @@ import org.aeonbits.owner.Config;
         "system:properties",
         "system:env"})
 public interface ConfigProperties extends Config {
-    // mvn clean -Dtest=LoginTest -Denv=qa -Dpassword=%password% test
-    // -ea -Denv=qa -Dpassword=${password}
+    // mvn clean -Dtest=LoginTest -Denv=qa -Dpassword=%password% -Dtoken=%token% test
+    // -ea -Denv=qa -Dpassword=${password} -Dtoken={token}
 
     String login();
     String password();
+
+    @Key("token")
+    String token();
 
     @Key("browser")
     String browser();

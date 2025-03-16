@@ -15,8 +15,6 @@ public class DashboardPage extends BasePage {
     private final String createButton = "//*[text()='Add']";
     private final String allDashboardsPage = "//*[text()='All Dashboards']";
     private final String dashboardsList = "//*[contains(@class, 'gridRow__grid-row-wrapper')]";
-
-    private final String deleteDashboardButton = "(//i[contains(@class, 'icon__icon-delete')])[1]";
     private final String confirmDeleteButton = "//button[text()='Delete']";
 
 
@@ -51,7 +49,13 @@ public class DashboardPage extends BasePage {
     }
 
     public List<WebElement> getDasboardsList() {
-        return browserActions.waitUntilElementsListIsNotEmpty(By.xpath(dashboardsList));
+        List<WebElement> dashboards;
+        try {
+            dashboards = browserActions.waitUntilElementsListIsNotEmpty(By.xpath(dashboardsList));
+        } catch (Exception e) {
+            return null;
+        }
+        return dashboards;
     }
 
     public DashboardPage deleteDashboardByName(String dashboardName) {

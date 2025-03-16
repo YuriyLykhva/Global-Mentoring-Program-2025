@@ -12,6 +12,7 @@ import java.util.Map;
 public class WebConfiguration {
 
     private String browserName;
+    private String token;
     private RunType runType;
     private String browserVersion;
     private String localUrl;

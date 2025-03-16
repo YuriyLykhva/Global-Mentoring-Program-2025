@@ -1,17 +1,18 @@
 package core.api;
 
-import io.restassured.RestAssured;
-import io.restassured.specification.RequestSpecification;
+import core.driver.RunType;
+import core.web.BaseTest;
 
-public class BaseApiTest {
+public class BaseApiTest extends BaseTest {
 
-    protected static final String BASE_URL = "http://localhost:8080/api/";
+    String projectName = System.getProperty("projectName");
 
-    String token = "API-KEY_SYI2ZqtkTY-dW0xH5o82RCEXohSM_gAMppycnJhWXhbRVXJfVG6PYdUUXp8fL9An";
+    final String homePageURL = webConfiguration.getRunType() == RunType.LOCAL ?
+            webConfiguration.getLocalUrl() :
+            webConfiguration.getRemoteUrl();
 
-    RequestSpecification requestSpecification = RestAssured.given()
-            .headers("accept", "*/*",
-                    "Authorization", "bearer" + token,
-                    "Content-Type", "application/json")
-            .baseUri(BASE_URL);
+    protected static final String BASE_URL = "/api/";
+
+    String token = System.getenv("TOKEN");
+
 }

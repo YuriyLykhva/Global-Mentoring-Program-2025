@@ -1,63 +1,40 @@
 package core.api;
 
-import io.restassured.RestAssured;
+import core.utils.RandomStringGenerator;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.Assertions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class DashboardApiTests extends BaseApiTest {
 
-    public void createDashboardTest(String dashboardName) {
-        String url = "v1/2025-project/dashboard";
-
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("description", "This is a test dashboard");
-        requestBody.put("name", dashboardName);
-
-        Response response =
-                RestAssured.given(requestSpecification)
-                        .body(requestBody)
-                        .when()
-                        .post(url)
-                        .then()
-                        .extract().response();
-
+    @Test
+    @org.junit.jupiter.api.Test
+    public void createDashboardTest() {
+        String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
+        ApiClient apiClient = new ApiClient();
+        Response response = apiClient.createDashboardWithName(targetDashboardName);
         Assert.assertEquals(response.getStatusCode(), 201);
+        Assertions.assertEquals(response.getStatusCode(), 201);
+
     }
 
     @Test
-    public void deleteDashboardByIdTest() {
-        String url = "v1/2025-project/dashboard";
-
-        //todo: get id from the response
-        String id = "76";
-
-        Response response =
-                RestAssured.given(requestSpecification)
-                        .when()
-                        .delete(url + "/" + id)
-                        .then()
-                        .extract().response();
-
+    @org.junit.jupiter.api.Test
+    public void getAllDashboardsTest() {
+        ApiClient apiClient = new ApiClient();
+        Response response = apiClient.getAllDashboards();
+        System.out.println(response.prettyPrint());
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
     @Test
-    public void getAllDashboardsTest() {
-        String url = "v1/2025-project/dashboard";
-
-        Response response =
-                RestAssured.given(requestSpecification)
-                        .when()
-                        .get(url)
-                        .then()
-                        .extract().response();
-
-        System.out.println(response.prettyPrint());
-
+    @org.junit.jupiter.api.Test
+    public void deleteDashboardByIdTest() {
+        //todo: get id from the response
+        String id = "127";
+        ApiClient apiClient = new ApiClient();
+        Response response = apiClient.deleteDashboardById(id);
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 }
