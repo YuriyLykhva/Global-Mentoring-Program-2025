@@ -8,6 +8,7 @@ import io.restassured.specification.RequestSpecification;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class ReportPortalApiClient {
     private final ApiClient defaultClient;
@@ -50,14 +51,15 @@ public class ReportPortalApiClient {
         return defaultClient.delete(url);
     }
 
-    public Response deleteDashboardByName(String dashboardByName) {
-        return deleteDashboardByName(dashboardByName, defaultProject);
+    public void deleteDashboardByName(String dashboardByName) {
+        deleteDashboardByName(dashboardByName, defaultProject);
     }
 
-    public Response deleteDashboardByName(String dashboardByName, String projectName) {
+    public void deleteDashboardByName(String dashboardByName, String projectName) {
         var allDashboards = getAllDashboards(projectName);
-        var dashboardId = allDashboards.jsonPath().get(String.format("content.find { it.name == '%s' }.id", dashboardByName)).toString();
-        return deleteDashboardById(dashboardId, projectName);
+        Optional.ofNullable(allDashboards.jsonPath().get(String.format("content.find { it.name == '%s' }.id", dashboardByName))).ifPresent(id -> {
+            deleteDashboardById(id.toString(), projectName);
+        });
     }
 
     private RequestSpecification getDefaultReportPortalSpecification() {
