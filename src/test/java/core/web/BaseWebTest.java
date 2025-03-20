@@ -1,6 +1,6 @@
 package core.web;
 
-import core.utils.TestListener;
+import core.BaseTest;
 import core.config.ConfigProperties;
 import core.config.PropertiesHolder;
 import core.driver.RunType;
@@ -10,14 +10,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Listeners;
 
-@Listeners({TestListener.class})
-public class BaseTest {
+public class BaseWebTest extends BaseTest {
+    private final WebConfiguration webConfiguration;
 
-    protected WebConfiguration webConfiguration;
-
-    public BaseTest() {
+    public BaseWebTest() {
         this.webConfiguration = new WebConfiguration();
         loadConfigurationFromFile();
     }
@@ -28,8 +25,8 @@ public class BaseTest {
         webConfiguration.setToken(config.token());
         webConfiguration.setRunType(RunType.valueOf(config.runType()));
         webConfiguration.setBrowserVersion(config.browserVersion());
-        webConfiguration.setLocalUrl(config.localUrl());
-        webConfiguration.setRemoteUrl(config.remoteUrl());
+        webConfiguration.setLocalUrl(config.webUrl());
+        webConfiguration.setRemoteUrl(config.webDriverRemoteUrl());
         webConfiguration.setTimeOutSeconds(config.timeOutSeconds());
         webConfiguration.setPollingTimeOutMilliSeconds(config.pollingTimeOutMilliSeconds());
         webConfiguration.setReadTimeOutSeconds(config.readTimeOutSeconds());
@@ -46,5 +43,4 @@ public class BaseTest {
     public void afterEachMethodTearDownWeb() {
         WebDriverHolder.getInstance().tearDown();
     }
-
 }

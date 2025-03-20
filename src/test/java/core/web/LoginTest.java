@@ -1,5 +1,6 @@
 package core.web;
 
+import core.BaseTest;
 import core.driver.RunType;
 import core.driver.WebDriverHolder;
 import core.model.User;
@@ -14,17 +15,12 @@ public class LoginTest extends BaseTest {
     @Test
     @org.testng.annotations.Test
     public void loginTest() {
-
-        final String homePageURL = webConfiguration.getRunType() == RunType.LOCAL ?
-                webConfiguration.getLocalUrl() :
-                webConfiguration.getRemoteUrl();
-
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
         DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
 
         loginPage
-                .openPage(homePageURL)
+                .openPage()
                 .typeLogin(user.getLogin())
                 .typePassword(user.getPassword())
                 .clickLoginButton();
@@ -33,6 +29,5 @@ public class LoginTest extends BaseTest {
 
         Assert.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");
         Assertions.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");
-
     }
 }

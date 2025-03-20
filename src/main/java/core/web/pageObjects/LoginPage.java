@@ -6,7 +6,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import static core.utils.UiWait.waitForElementLocatedBy;
 
-public class LoginPage extends BasePage {
+public class LoginPage extends BaseReportPortalPage {
 
     private final String loginInputLocator = "//input[@name='login']";
     private final String passwordInputLocator = "//input[@name='password']";
@@ -20,8 +20,13 @@ public class LoginPage extends BasePage {
     }
 
     @Override
-    public LoginPage openPage(String homePageURL) {
-        driver.get(homePageURL + LOGIN_PATH);
+    public String pathUrl() {
+        return "/ui/#login";
+    }
+
+    @Override
+    public LoginPage openPage(String... params) {
+        super.openPage(params);
         waitForElementLocatedBy(driver, loginButton);
         return this;
     }

@@ -7,34 +7,36 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class DashboardApiTests extends BaseApiTest {
+    private final ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
 
     @Test
     @org.junit.jupiter.api.Test
     public void createDashboardTest() {
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
-        ApiClient apiClient = new ApiClient();
-        Response response = apiClient.createDashboardWithName(targetDashboardName);
+        Response response = reportPortalApiClient.createDashboardWithName(targetDashboardName);
         Assert.assertEquals(response.getStatusCode(), 201);
         Assertions.assertEquals(response.getStatusCode(), 201);
-
     }
 
     @Test
     @org.junit.jupiter.api.Test
     public void getAllDashboardsTest() {
-        ApiClient apiClient = new ApiClient();
-        Response response = apiClient.getAllDashboards();
-        System.out.println(response.prettyPrint());
+        Response response = reportPortalApiClient.getAllDashboards();
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
     @Test
     @org.junit.jupiter.api.Test
     public void deleteDashboardByIdTest() {
-        //todo: get id from the response
-        String id = "127";
-        ApiClient apiClient = new ApiClient();
-        Response response = apiClient.deleteDashboardById(id);
-        Assert.assertEquals(response.getStatusCode(), 200);
+        //prepare
+        String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
+        var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        var createdId = createdDashboard.path("id").toString();
+
+        //act
+        Response deleteResponse = reportPortalApiClient.deleteDashboardById(createdId);
+
+        //verify
+        Assert.assertEquals(deleteResponse.getStatusCode(), 200);
     }
 }

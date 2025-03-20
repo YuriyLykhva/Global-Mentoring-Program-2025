@@ -1,6 +1,7 @@
 package core.web;
 
-import core.api.ApiClient;
+import core.BaseTest;
+import core.api.ReportPortalApiClient;
 import core.driver.RunType;
 import core.driver.WebDriverHolder;
 import core.model.User;
@@ -19,9 +20,6 @@ public class DeleteDashboardTest extends BaseTest {
     @Test
     @org.testng.annotations.Test
     public void deleteDashboardTest() {
-        final String homePageURL = webConfiguration.getRunType() == RunType.LOCAL ?
-                webConfiguration.getLocalUrl() :
-                webConfiguration.getRemoteUrl();
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
         DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
@@ -29,7 +27,7 @@ public class DeleteDashboardTest extends BaseTest {
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
 
         loginPage
-                .openPage(homePageURL)
+                .openPage()
                 .typeLogin(user.getLogin())
                 .typePassword(user.getPassword())
                 .clickLoginButton();
@@ -37,8 +35,8 @@ public class DeleteDashboardTest extends BaseTest {
         List<WebElement> initialDashboardList = dashboardPage.getDasboardsList();
         int initialDashboardListSize = null == initialDashboardList ? 0 : initialDashboardList.size();
 
-        ApiClient apiClient = new ApiClient();
-        apiClient.createDashboardWithName(targetDashboardName);
+        ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
+        reportPortalApiClient.createDashboardWithName(targetDashboardName);
 
         List<WebElement> dashboardsAfterTest = dashboardPage
                 .deleteDashboardByName(targetDashboardName)

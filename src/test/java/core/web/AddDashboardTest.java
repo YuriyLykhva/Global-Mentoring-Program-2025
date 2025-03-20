@@ -1,5 +1,6 @@
 package core.web;
 
+import core.BaseTest;
 import core.driver.RunType;
 import core.driver.WebDriverHolder;
 import core.model.User;
@@ -18,9 +19,6 @@ public class AddDashboardTest extends BaseTest {
     @Test
     @org.testng.annotations.Test
     public void addDashboardTest() {
-        final String homePageURL = webConfiguration.getRunType() == RunType.LOCAL ?
-                webConfiguration.getLocalUrl() :
-                webConfiguration.getRemoteUrl();
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
         DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
@@ -28,7 +26,7 @@ public class AddDashboardTest extends BaseTest {
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
 
         loginPage
-                .openPage(homePageURL)
+                .openPage()
                 .typeLogin(user.getLogin())
                 .typePassword(user.getPassword())
                 .clickLoginButton();

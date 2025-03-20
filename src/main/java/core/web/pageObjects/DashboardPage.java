@@ -3,11 +3,10 @@ package core.web.pageObjects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
-public class DashboardPage extends BasePage {
+public class DashboardPage extends BaseReportPortalPage {
 
     private final String allDashboardsTitle = "span[title='All Dashboards']";
     private final String addNewDashboardButton = "//*[text()='Add New Dashboard']";
@@ -17,10 +16,13 @@ public class DashboardPage extends BasePage {
     private final String dashboardsList = "//*[contains(@class, 'gridRow__grid-row-wrapper')]";
     private final String confirmDeleteButton = "//button[text()='Delete']";
 
+    @Override
+    public String pathUrl() {
+        return "/ui/#%s/dashboard";
+    }
 
     public DashboardPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this);
     }
 
     public String getAllDashboardsTitle() {

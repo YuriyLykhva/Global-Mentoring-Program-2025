@@ -27,11 +27,14 @@ public interface ConfigProperties extends Config {
     @Key("browserVersion")
     String browserVersion();
 
-    @Key("localUrl")
-    String localUrl();
+    @Key("webUrl")
+    String webUrl();
 
-    @Key("remoteUrl")
-    String remoteUrl();
+    @Key("apiUrl")
+    String apiUrl();
+
+    @Key("webDriverRemoteUrl")
+    String webDriverRemoteUrl();
 
     @Key("timeOutSeconds")
     Long timeOutSeconds();
@@ -42,7 +45,7 @@ public interface ConfigProperties extends Config {
     @Key("readTimeOutSeconds")
     Long readTimeOutSeconds();
 
-    @Key("report_portal.base.url")
-    String reportPortalBaseUrl();
+    @Key("defaultRpProject")
+    String defaultRpProjectName();
 
 }
