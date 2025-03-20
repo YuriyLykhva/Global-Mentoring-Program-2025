@@ -25,7 +25,7 @@ public class ReportPortalApiClient {
     }
 
     public Response createDashboardWithName(String dashboardName, String projectName) {
-        String url = String.format("v1/%s/dashboard", projectName);
+        String url = String.format("/%s/dashboard", projectName);
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("description", "This is a test dashboard");
         requestBody.put("name", dashboardName);
@@ -37,7 +37,7 @@ public class ReportPortalApiClient {
     }
 
     public Response getAllDashboards(String projectName) {
-        String url = String.format("v1/%s/dashboard", projectName);
+        String url = String.format("/%s/dashboard", projectName);
         return defaultClient.get(url);
     }
 
@@ -46,14 +46,24 @@ public class ReportPortalApiClient {
     }
 
     public Response deleteDashboardById(String id, String projectName) {
-        String url = String.format("v1/%s/dashboard/%s", projectName, id);
+        String url = String.format("/%s/dashboard/%s", projectName, id);
         return defaultClient.delete(url);
+    }
+
+    public Response deleteDashboardByName(String dashboardByName) {
+        return deleteDashboardByName(dashboardByName, defaultProject);
+    }
+
+    public Response deleteDashboardByName(String dashboardByName, String projectName) {
+        var allDashboards = getAllDashboards(projectName);
+        var dashboardId = allDashboards.jsonPath().get(String.format("content.find { it.name == '%s' }.id", dashboardByName)).toString();
+        return deleteDashboardById(dashboardId, projectName);
     }
 
     private RequestSpecification getDefaultReportPortalSpecification() {
         var properties = PropertiesHolder.getInstance().getConfigProperties();
-        var baseUrl = properties.apiUrl();
-        var token = properties.token();
+        var baseUrl = properties.rpUrl() + "/api/v1";
+        var token = properties.apiKey();
         return RestAssured.given()
                 .headers("accept", "*/*",
                         "Authorization", "bearer" + token,

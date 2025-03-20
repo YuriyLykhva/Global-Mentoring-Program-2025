@@ -1,20 +1,40 @@
 package core.web;
 
-import core.BaseTest;
-import core.driver.RunType;
+import core.api.ReportPortalApiClient;
 import core.driver.WebDriverHolder;
 import core.model.User;
 import core.utils.RandomStringGenerator;
 import core.web.pageObjects.DashboardPage;
 import core.web.pageObjects.LoginPage;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
-import java.util.*;
+import java.util.List;
 
-public class AddDashboardTest extends BaseTest {
+public class AddDashboardTest extends BaseWebTest {
+
+    private final ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
+    private final ThreadLocal<String> createdDashboard = new ThreadLocal<>();
+
+    @BeforeEach
+    @BeforeMethod(alwaysRun = true)
+    public void setup() {
+        createdDashboard.remove();
+    }
+
+    @AfterEach
+    @AfterMethod(alwaysRun = true)
+    public void tearDown() {
+        if(createdDashboard.get() != null){
+            reportPortalApiClient.deleteDashboardByName(createdDashboard.get());
+        }
+    }
 
     @Test
     @org.testng.annotations.Test
@@ -24,6 +44,7 @@ public class AddDashboardTest extends BaseTest {
         DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
 
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
+        createdDashboard.set(targetDashboardName);
 
         loginPage
                 .openPage()
@@ -31,9 +52,10 @@ public class AddDashboardTest extends BaseTest {
                 .typePassword(user.getPassword())
                 .clickLoginButton();
 
-        List<WebElement> initialDashboardList = dashboardPage.getDasboardsList();
-        int intialDashboardListSize = null == initialDashboardList ? 0 : initialDashboardList.size();
+        dashboardPage.openPage();
 
+        List<WebElement> initialDashboardList = dashboardPage.getDasboardsList();
+        int initialDashboardListSize = null == initialDashboardList ? 0 : initialDashboardList.size();
 
         List<WebElement> dashboardListAfterAddingNew =
                 dashboardPage
@@ -43,11 +65,11 @@ public class AddDashboardTest extends BaseTest {
                         .returnToDashboardPage()
                         .getDasboardsList();
 
-        Assert.assertEquals(intialDashboardListSize + 1,
+        Assert.assertEquals(initialDashboardListSize + 1,
                 dashboardListAfterAddingNew.size(),
                 "Dashboard is not created!");
 
-        Assertions.assertEquals(intialDashboardListSize + 1,
+        Assertions.assertEquals(initialDashboardListSize + 1,
                 dashboardListAfterAddingNew.size(),
                 "Dashboard is not created!");
 
@@ -57,8 +79,6 @@ public class AddDashboardTest extends BaseTest {
 
         Assert.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
         Assertions.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
-
     }
-
 
 }

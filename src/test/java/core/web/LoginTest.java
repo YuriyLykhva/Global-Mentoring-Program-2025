@@ -1,7 +1,5 @@
 package core.web;
 
-import core.BaseTest;
-import core.driver.RunType;
 import core.driver.WebDriverHolder;
 import core.model.User;
 import core.web.pageObjects.DashboardPage;
@@ -10,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testng.Assert;
 
-public class LoginTest extends BaseTest {
+public class LoginTest extends BaseWebTest {
 
     @Test
     @org.testng.annotations.Test
@@ -24,6 +22,8 @@ public class LoginTest extends BaseTest {
                 .typeLogin(user.getLogin())
                 .typePassword(user.getPassword())
                 .clickLoginButton();
+
+        dashboardPage.openPage();
 
         String allDashboardsTitle = dashboardPage.getAllDashboardsTitle();
 

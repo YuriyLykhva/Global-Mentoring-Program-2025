@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BrowserActions {
 
-    private UiWait uiWait = new UiWait();
+    private final UiWait uiWait = new UiWait();
 
     public WebElement getWebElement(By by) {
         WebElement element = uiWait.until(wd -> wd.findElement(by), "Find element by locator: **%s**", by);
@@ -23,14 +23,22 @@ public class BrowserActions {
     }
 
     public BrowserActions inputText(By by, String text) {
-        WebElement element = getWebElement(by);
-        element.sendKeys(text);
+        uiWait.until(wd -> {
+            WebElement element = wd.findElement(by);
+            element.click();
+            element.clear();
+            element.sendKeys(text.toString());
+            return element;
+        }, "Type text *'%s'* into the element **%s**", text, by);
         return this;
     }
 
     public BrowserActions click(By by) {
-        WebElement element = getWebElement(by);
-        element.click();
+        uiWait.until(wd -> {
+            WebElement element = wd.findElement(by);
+            element.click();
+            return element;
+        }, "Click on the element by locator: **%s**", by);
         return this;
     }
 

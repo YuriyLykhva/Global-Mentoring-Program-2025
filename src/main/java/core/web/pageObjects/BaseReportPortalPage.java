@@ -10,6 +10,6 @@ public abstract class BaseReportPortalPage extends BasePage {
 
     @Override
     public String basePageUrl() {
-        return PropertiesHolder.getInstance().getConfigProperties().webUrl();
+        return PropertiesHolder.getInstance().getConfigProperties().rpUrl();
     }
 }
