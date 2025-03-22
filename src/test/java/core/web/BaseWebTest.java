@@ -1,6 +1,7 @@
 package core.web;
 
 import core.BaseTest;
+import core.api.ReportPortalApiClient;
 import core.config.ConfigProperties;
 import core.config.PropertiesHolder;
 import core.driver.RunType;
@@ -15,6 +16,8 @@ import org.testng.annotations.BeforeMethod;
 public class BaseWebTest extends BaseTest {
     private final WebConfiguration webConfiguration;
     protected final BrowserActions browserActions;
+    private final ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
+    protected final ThreadLocal<String> createdDashboard = new ThreadLocal<>();
 
     public BaseWebTest() {
         this.webConfiguration = new WebConfiguration();
@@ -39,11 +42,15 @@ public class BaseWebTest extends BaseTest {
     @BeforeMethod(alwaysRun = true)
     public void beforeEachMethodSetupWeb() {
         WebDriverHolder.getInstance().setDriver(webConfiguration);
+        createdDashboard.remove();
     }
 
     @AfterEach
     @AfterMethod(alwaysRun = true)
     public void afterEachMethodTearDownWeb() {
         WebDriverHolder.getInstance().tearDown();
+        if(createdDashboard.get() != null){
+            reportPortalApiClient.deleteDashboardByName(createdDashboard.get());
+        }
     }
 }

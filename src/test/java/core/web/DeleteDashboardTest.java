@@ -6,37 +6,93 @@ import core.model.User;
 import core.utils.RandomStringGenerator;
 import core.web.pageObjects.DashboardPage;
 import core.web.pageObjects.LoginPage;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class DeleteDashboardTest extends BaseWebTest {
-    private final ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
-    private final ThreadLocal<String> createdDashboard = new ThreadLocal<>();
 
-    @BeforeEach
-    @BeforeMethod(alwaysRun = true)
-    public void setup() {
-        createdDashboard.remove();
+    static Stream<Object[]> deleteDashboardTestDataStream1() {
+        return Stream.of(
+                new Object[]{"DashboardOne"},
+                new Object[]{"DashboardTwo"},
+                new Object[]{"DashboardThree"}
+        );
     }
 
-    @AfterEach
-    @AfterMethod(alwaysRun = true)
-    public void tearDown() {
-        if(createdDashboard.get() != null){
-            reportPortalApiClient.deleteDashboardByName(createdDashboard.get());
-        }
+    static Stream<Arguments> deleteDashboardTestDataStream2() {
+        return Stream.of(
+                Arguments.of("DashboardOne"),
+                Arguments.of("DashboardTwo"),
+                Arguments.of("DashboardThree")
+        );
+    }
+
+    @DataProvider(name = "deleteDashboardTest", parallel = true)
+    public Object[][] deleteDashboardTestData() {
+        return new Object[][]{
+                {"DashboardOne"},
+                {"DashboardTwo"},
+                {"DashboardThree"}
+        };
+    }
+
+    @ParameterizedTest
+    @MethodSource("deleteDashboardTestDataStream2")//todo: deleteDashboardTestDataStream1 works as well
+    @org.testng.annotations.Test(dataProvider = "deleteDashboardTest")
+    public void deleteDashboardDataDrivenTest(String targetDashboardName) {
+        User user = User.createUser();
+        LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
+        DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
+
+        createdDashboard.set(targetDashboardName);
+
+        loginPage
+                .openPage()
+                .typeLogin(user.getLogin())
+                .typePassword(user.getPassword())
+                .clickLoginButton();
+
+        dashboardPage.openPage();
+
+        ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
+        reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        browserActions.refreshPage();
+
+        List<WebElement> dashboardsAfterCreationTestDashboard = dashboardPage.getDasboardsList();
+
+        boolean isDashboardCreated = dashboardsAfterCreationTestDashboard.stream()
+                .map(WebElement::getText)
+                .anyMatch(dn -> dn.contains(targetDashboardName));
+
+        Assert.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
+        Assertions.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
+
+        dashboardPage
+                .deleteDashboardByName(targetDashboardName)
+                .returnToDashboardPage();
+
+        List<WebElement> dashboardsAfterDeletionTestDashboard = dashboardPage.getDasboardsList();
+
+        boolean isDashboardDeleted = dashboardsAfterDeletionTestDashboard.stream()
+                .map(WebElement::getText)
+                .anyMatch(dn -> dn.contains(targetDashboardName));
+
+        Assert.assertFalse(isDashboardDeleted, "The test dashboard was not deleted!");
+        Assertions.assertFalse(isDashboardDeleted, "The test dashboard was not deleted!");
+
     }
 
     @Test
-    @org.testng.annotations.Test
+    @org.testng.annotations.Test(threadPoolSize = 3, invocationCount = 5, timeOut = 1000)
     public void deleteDashboardTest() {
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
@@ -53,23 +109,31 @@ public class DeleteDashboardTest extends BaseWebTest {
 
         dashboardPage.openPage();
 
-        List<WebElement> initialDashboardList = dashboardPage.getDasboardsList();
-        int initialDashboardListSize = null == initialDashboardList ? 0 : initialDashboardList.size();
-
         ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
         reportPortalApiClient.createDashboardWithName(targetDashboardName);
         browserActions.refreshPage();
 
-        List<WebElement> dashboardsAfterTest = dashboardPage
+        List<WebElement> dashboardsAfterCreationTestDashboard = dashboardPage.getDasboardsList();
+
+        boolean isDashboardCreated = dashboardsAfterCreationTestDashboard.stream()
+                .map(WebElement::getText)
+                .anyMatch(dn -> dn.contains(targetDashboardName));
+
+        Assert.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
+        Assertions.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
+
+        dashboardPage
                 .deleteDashboardByName(targetDashboardName)
-                .returnToDashboardPage()
-                .getDasboardsList();
-        int afterTestDashboardListSize = null == dashboardsAfterTest ? 0 : dashboardsAfterTest.size();
+                .returnToDashboardPage();
 
-        Assert.assertEquals(afterTestDashboardListSize,
-                initialDashboardListSize, "Dashboard is not deleted!");
+        List<WebElement> dashboardsAfterDeletionTestDashboard = dashboardPage.getDasboardsList();
 
-        Assertions.assertEquals(afterTestDashboardListSize,
-                initialDashboardListSize, "Dashboard is not deleted!");
+        boolean isDashboardDeleted = dashboardsAfterDeletionTestDashboard.stream()
+                .map(WebElement::getText)
+                .anyMatch(dn -> dn.contains(targetDashboardName));
+
+        Assert.assertFalse(isDashboardDeleted, "The test dashboard was not deleted!");
+        Assertions.assertFalse(isDashboardDeleted, "The test dashboard was not deleted!");
+
     }
 }
