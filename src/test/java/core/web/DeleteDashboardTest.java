@@ -22,26 +22,26 @@ public class DeleteDashboardTest extends BaseWebTest {
 
     static Stream<Object[]> deleteDashboardTestDataStream1() {
         return Stream.of(
-                new Object[]{"DashboardOne"},
-                new Object[]{"DashboardTwo"},
-                new Object[]{"DashboardThree"}
+                new Object[]{RandomStringGenerator.getTargetDashboardName()},
+                new Object[]{RandomStringGenerator.getTargetDashboardName()},
+                new Object[]{RandomStringGenerator.getTargetDashboardName()}
         );
     }
 
     static Stream<Arguments> deleteDashboardTestDataStream2() {
         return Stream.of(
-                Arguments.of("DashboardOne"),
-                Arguments.of("DashboardTwo"),
-                Arguments.of("DashboardThree")
+                Arguments.of(RandomStringGenerator.getTargetDashboardName()),
+                Arguments.of(RandomStringGenerator.getTargetDashboardName()),
+                Arguments.of(RandomStringGenerator.getTargetDashboardName())
         );
     }
 
     @DataProvider(name = "deleteDashboardTest", parallel = true)
     public Object[][] deleteDashboardTestData() {
         return new Object[][]{
-                {"DashboardOne"},
-                {"DashboardTwo"},
-                {"DashboardThree"}
+                {RandomStringGenerator.getTargetDashboardName()},
+                {RandomStringGenerator.getTargetDashboardName()},
+                {RandomStringGenerator.getTargetDashboardName()}
         };
     }
 
