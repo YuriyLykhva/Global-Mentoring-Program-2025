@@ -5,9 +5,9 @@ import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
         features = "src/test/resources/features/",
-        glue = "stepDefinitions",
+        glue = {"stepDefinitions", "stepDefinitions.hooks"},
         plugin = {"pretty", "html:target/cucumber-reports.html"},
-        tags = "@API"
+        tags = "@DeleteDashboard"
 )
 public class DashboardTestRunner extends AbstractTestNGCucumberTests {
 }

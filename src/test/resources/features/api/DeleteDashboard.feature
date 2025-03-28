@@ -1,7 +1,7 @@
 Feature: Dashboard Management
 
-  @API
-  Scenario Outline: Delete a new dashboard
+  @API @BDD
+  Scenario Outline: Delete a new dashboard via API
     Given User has API access with a valid token
     When User creates a new dashboard with a random name
     And User deletes the dashboard

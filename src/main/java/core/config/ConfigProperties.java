@@ -16,6 +16,7 @@ public interface ConfigProperties extends Config {
     // -ea -Denv=dev -Drp.password=${password} -Drp.api.key=${token} -DprojectName=2025-project
     // mvn clean test "-Dcucumber.filter.tags=@API" -Denv=dev "-Drp.password=%password%" "-Drp.api.key=%token%"
     // mvn clean test '-Dcucumber.options="src/test/resources/features"' -Denv=dev "-Drp.password=%password%" "-Drp.api.key=%token%"
+    // mvn clean test -Dtest=web/LoginTest -Denv=dev "-Drp.password=%password%" "-Drp.api.key=%token%"
 
     //rp props
     @Key("rp.username")

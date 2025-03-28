@@ -1,31 +1,30 @@
-package stepDefinitions;
+package stepDefinitions.hooks;
 
 import core.api.ReportPortalApiClient;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.restassured.response.Response;
-
 import java.util.Optional;
 
-public class Hooks {
+public class ApiHooks {
 
-    protected static Response response;
-    protected static final ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
-    protected static final ThreadLocal<String> createdDashboard = new ThreadLocal<>();
+    public static Response response;
+    public static final ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
+    public static final ThreadLocal<String> createdDashboard = new ThreadLocal<>();
 
-    @Before
+    @Before("@API")
     public void setUp() {
         createdDashboard.remove();
     }
 
-    @After
+    @After("@API")
     public void tearDown() {
         if(createdDashboard.get() != null){
             reportPortalApiClient.deleteDashboardById(createdDashboard.get());
         }
     }
 
-    protected static void extractAndSetCreatedDashboard(Response response){
+    public static void extractAndSetCreatedDashboard(Response response){
         Optional.ofNullable(response.path("id")).ifPresent(id -> {
             createdDashboard.set(id.toString());
         });
