@@ -84,7 +84,7 @@ public class DashboardSteps {
         Assert.assertFalse(isDashboardDeleted, "The test dashboard was not deleted!");
     }
 
-    @When("User creates new dashboard with {string} on Dashboard page")
+    @When("User creates new dashboard with {string} prefix on Dashboard page")
     public void userCreatesANewDashboardWithDashboardNamePrefixOnDashboardPage(String dashboardNamePrefix) {
         targetDashboardName = dashboardNamePrefix + "-" + RandomStringGenerator.getTargetDashboardName();
         dashboardListAfterAddingNew =
