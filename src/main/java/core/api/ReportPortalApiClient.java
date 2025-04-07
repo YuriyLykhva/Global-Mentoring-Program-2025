@@ -33,12 +33,35 @@ public class ReportPortalApiClient {
         return defaultClient.post(url, requestBody);
     }
 
+    public Response updateDescriptionOfDashboardById(String id) {
+        return updateDescriptionOfDashboardById(id, defaultProject);
+    }
+
+    public Response updateDescriptionOfDashboardById(String id, String projectName) {
+        String description = getDashboardById(id).path("description") + " - updated";
+        String name = getDashboardById(id).path("name");
+        String url = String.format("/%s/dashboard/%s", projectName, id);
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("description", description);
+        requestBody.put("name", name);
+        return defaultClient.put(url, requestBody);
+    }
+
     public Response getAllDashboards() {
         return getAllDashboards(defaultProject);
     }
 
     public Response getAllDashboards(String projectName) {
         String url = String.format("/%s/dashboard", projectName);
+        return defaultClient.get(url);
+    }
+
+    public Response getDashboardById(String id) {
+        return getDashboardById(id, defaultProject);
+    }
+
+    public Response getDashboardById(String id, String projectName) {
+        String url = String.format("/%s/dashboard/%s", projectName, id);
         return defaultClient.get(url);
     }
 
@@ -66,6 +89,7 @@ public class ReportPortalApiClient {
         var properties = PropertiesHolder.getInstance().getConfigProperties();
         var baseUrl = properties.rpUrl() + "/api/v1";
         var token = properties.apiKey();
+        RestAssured.proxy("127.0.0.1", 8888);
         return RestAssured.given()
                 .headers("accept", "*/*",
                         "Authorization", "bearer" + token,

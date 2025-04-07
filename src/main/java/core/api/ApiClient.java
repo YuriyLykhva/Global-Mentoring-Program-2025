@@ -15,6 +15,12 @@ public class ApiClient {
         return handleResponse(requestSpecification.body(requestBody).when().post(url));
     }
 
+    public Response put(String url, Object requestBody) {
+        return handleResponse(requestSpecification.body(requestBody).when()
+//                .patch(url));
+                .put(url));
+    }
+
     public Response get(String url) {
         return handleResponse(requestSpecification.when().get(url));
     }
