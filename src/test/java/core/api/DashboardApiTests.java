@@ -16,6 +16,7 @@ public class DashboardApiTests extends BaseApiTest {
 
         //act
         Response response = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        extractAndSetCreatedDashboard(response);
         var createdId = response.path("id").toString();
         var createdDashboardBody = reportPortalApiClient.getDashboardById(createdId);
         String dashboardName = createdDashboardBody.path("name").toString();
@@ -85,6 +86,7 @@ public class DashboardApiTests extends BaseApiTest {
         //prepare
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        extractAndSetCreatedDashboard(createdDashboard);
         var createdId = createdDashboard.path("id").toString();
 
         //act
@@ -106,6 +108,7 @@ public class DashboardApiTests extends BaseApiTest {
         //prepare
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        extractAndSetCreatedDashboard(createdDashboard);
         var createdId = createdDashboard.path("id").toString();
 
         //act
@@ -127,6 +130,7 @@ public class DashboardApiTests extends BaseApiTest {
         //prepare
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        extractAndSetCreatedDashboard(createdDashboard);
         var createdId = createdDashboard.path("id").toString();
 
         //act
@@ -148,6 +152,7 @@ public class DashboardApiTests extends BaseApiTest {
         //prepare
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        extractAndSetCreatedDashboard(createdDashboard);
         var createdId = createdDashboard.path("id").toString();
 
         //act
@@ -164,6 +169,7 @@ public class DashboardApiTests extends BaseApiTest {
         //prepare
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        extractAndSetCreatedDashboard(createdDashboard);
         var createdId = createdDashboard.path("id").toString();
 
         //act
