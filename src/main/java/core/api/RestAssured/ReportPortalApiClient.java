@@ -1,4 +1,4 @@
-package core.api;
+package core.api.RestAssured;
 
 import core.config.ConfigProperties;
 import core.config.PropertiesHolder;
@@ -12,12 +12,11 @@ import java.util.Optional;
 
 public class ReportPortalApiClient {
     private final ApiClient defaultClient;
-    private final ConfigProperties configProperties;
     private final String defaultProject;
 
     public ReportPortalApiClient() {
         defaultClient = new ApiClient(getDefaultReportPortalSpecification());
-        configProperties = PropertiesHolder.getInstance().getConfigProperties();
+        ConfigProperties configProperties = PropertiesHolder.getInstance().getConfigProperties();
         defaultProject = configProperties.defaultRpProjectName();
     }
 
@@ -80,16 +79,16 @@ public class ReportPortalApiClient {
 
     public void deleteDashboardByName(String dashboardByName, String projectName) {
         var allDashboards = getAllDashboards(projectName);
-        Optional.ofNullable(allDashboards.jsonPath().get(String.format("content.find { it.name == '%s' }.id", dashboardByName))).ifPresent(id -> {
-            deleteDashboardById(id.toString(), projectName);
-        });
+        Optional.ofNullable(allDashboards.jsonPath()
+                        .get(String.format("content.find { it.name == '%s' }.id", dashboardByName)))
+                .ifPresent(id -> deleteDashboardById(id.toString(), projectName));
     }
 
     private RequestSpecification getDefaultReportPortalSpecification() {
         var properties = PropertiesHolder.getInstance().getConfigProperties();
         var baseUrl = properties.rpUrl() + "/api/v1";
         var token = properties.apiKey();
-        RestAssured.proxy("127.0.0.1", 8888);
+//        RestAssured.proxy("127.0.0.1", 8888);
         return RestAssured.given()
                 .headers("accept", "*/*",
                         "Authorization", "bearer" + token,

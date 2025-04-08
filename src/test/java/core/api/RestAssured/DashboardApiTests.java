@@ -1,4 +1,4 @@
-package core.api;
+package core.api.RestAssured;
 
 import core.utils.RandomStringGenerator;
 import io.restassured.response.Response;
