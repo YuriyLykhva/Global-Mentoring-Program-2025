@@ -1,6 +1,6 @@
 package stepDefinitions.hooks;
 
-import core.api.ReportPortalApiClient;
+import core.api.RestAssured.ReportPortalApiClient;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.restassured.response.Response;
@@ -25,8 +25,6 @@ public class ApiHooks {
     }
 
     public static void extractAndSetCreatedDashboard(Response response){
-        Optional.ofNullable(response.path("id")).ifPresent(id -> {
-            createdDashboard.set(id.toString());
-        });
+        Optional.ofNullable(response.path("id")).ifPresent(id -> createdDashboard.set(id.toString()));
     }
 }

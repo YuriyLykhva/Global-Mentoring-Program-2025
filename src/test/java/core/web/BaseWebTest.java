@@ -1,7 +1,7 @@
 package core.web;
 
 import core.BaseTest;
-import core.api.ReportPortalApiClient;
+import core.api.RestAssured.ReportPortalApiClient;
 import core.config.ConfigProperties;
 import core.config.PropertiesHolder;
 import core.driver.RunType;

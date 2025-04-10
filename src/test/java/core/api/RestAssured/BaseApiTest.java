@@ -1,4 +1,4 @@
-package core.api;
+package core.api.RestAssured;
 
 import core.BaseTest;
 import io.restassured.response.Response;
@@ -29,9 +29,7 @@ public class BaseApiTest extends BaseTest {
     }
 
     protected void extractAndSetCreatedDashboard(Response response){
-        Optional.ofNullable(response.path("id")).ifPresent(id -> {
-            createdDashboard.set(id.toString());
-        });
+        Optional.ofNullable(response.path("id")).ifPresent(id -> createdDashboard.set(id.toString()));
     }
 
 }

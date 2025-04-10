@@ -1,4 +1,4 @@
-package core.api;
+package core.api.RestAssured;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -13,6 +13,11 @@ public class ApiClient {
 
     public Response post(String url, Object requestBody) {
         return handleResponse(requestSpecification.body(requestBody).when().post(url));
+    }
+
+    public Response put(String url, Object requestBody) {
+        return handleResponse(requestSpecification.body(requestBody).when()
+                .put(url));
     }
 
     public Response get(String url) {
