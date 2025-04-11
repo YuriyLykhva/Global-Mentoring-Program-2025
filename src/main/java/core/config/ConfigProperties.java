@@ -1,5 +1,6 @@
 package core.config;
 
+import core.meta.HttpClientType;
 import org.aeonbits.owner.Config;
 
 @Config.LoadPolicy(Config.LoadType.MERGE)
@@ -52,6 +53,7 @@ public interface ConfigProperties extends Config {
     Long pollingTimeOutMilliSeconds();
     @Key("readTimeOutSeconds")
     Long readTimeOutSeconds();
-
+    @Key("httpClientType")
+    HttpClientType httpClientType();
 
 }

@@ -1,6 +1,6 @@
 package core.web;
 
-import core.api.RestAssured.ReportPortalApiClient;
+import core.api.ReportPortalApiClient;
 import core.driver.WebDriverHolder;
 import core.model.User;
 import core.utils.RandomStringGenerator;

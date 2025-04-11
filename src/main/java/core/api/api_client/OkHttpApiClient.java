@@ -1,4 +1,4 @@
-package core.api.OkHttp;
+package core.api.api_client;
 
 import core.config.ConfigProperties;
 import core.config.PropertiesHolder;
@@ -9,7 +9,7 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
-public class OkHttpApiClient {
+public class OkHttpApiClient implements IApiClient {
     ConfigProperties configProperties;
     protected final String token;
 
@@ -54,5 +54,25 @@ public class OkHttpApiClient {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization", "Bearer" + token)
                 .build();
+    }
+
+    @Override
+    public CustomResponse post(String url, Object requestBody) {
+        return null;
+    }
+
+    @Override
+    public CustomResponse put(String url, Object requestBody) {
+        return null;
+    }
+
+    @Override
+    public CustomResponse get(String url) {
+        return null;
+    }
+
+    @Override
+    public CustomResponse delete(String url) {
+        return null;
     }
 }

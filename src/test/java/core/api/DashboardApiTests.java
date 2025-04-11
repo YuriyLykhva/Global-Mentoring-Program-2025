@@ -1,7 +1,6 @@
-package core.api.RestAssured;
+package core.api;
 
 import core.utils.RandomStringGenerator;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -15,11 +14,11 @@ public class DashboardApiTests extends BaseApiTest {
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
 
         //act
-        Response response = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        var response = reportPortalApiClient.createDashboardWithName(targetDashboardName);
         extractAndSetCreatedDashboard(response);
-        var createdId = response.path("id").toString();
+        var createdId = response.getFiledValueFromJson("id");
         var createdDashboardBody = reportPortalApiClient.getDashboardById(createdId);
-        String dashboardName = createdDashboardBody.path("name").toString();
+        String dashboardName = createdDashboardBody.getFiledValueFromJson("name");
         boolean isCreated = dashboardName.equals(targetDashboardName);
 
         //verify
@@ -36,7 +35,7 @@ public class DashboardApiTests extends BaseApiTest {
         String targetDashboardName = "";
 
         //act
-        Response response = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        var response = reportPortalApiClient.createDashboardWithName(targetDashboardName);
 
         //verify
         Assert.assertEquals(response.getStatusCode(), 400);
@@ -51,7 +50,7 @@ public class DashboardApiTests extends BaseApiTest {
                 "vowrenvtoiwrueyntovuwyrenotvuyrewovynwtvnweiutvnoireu";
 
         //act
-        Response response = reportPortalApiClient.createDashboardWithName(targetDashboardName);
+        var response = reportPortalApiClient.createDashboardWithName(targetDashboardName);
 
         //verify
         Assert.assertEquals(response.getStatusCode(), 400);
@@ -62,7 +61,7 @@ public class DashboardApiTests extends BaseApiTest {
     @org.junit.jupiter.api.Test
     public void getAllDashboardsTest() {
         //act
-        Response response = reportPortalApiClient.getAllDashboards();
+        var response = reportPortalApiClient.getAllDashboards();
 
         //verify
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -73,7 +72,7 @@ public class DashboardApiTests extends BaseApiTest {
     @org.junit.jupiter.api.Test
     public void getAllDashboardsNegativeTest() {
         //act
-        Response response = reportPortalApiClient.getAllDashboards("");
+        var response = reportPortalApiClient.getAllDashboards("");
 
         //verify
         Assert.assertEquals(response.getStatusCode(), 400);
@@ -87,12 +86,12 @@ public class DashboardApiTests extends BaseApiTest {
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
         extractAndSetCreatedDashboard(createdDashboard);
-        var createdId = createdDashboard.path("id").toString();
+        var createdId = createdDashboard.getFiledValueFromJson("id");
 
         //act
-        Response response = reportPortalApiClient.updateDescriptionOfDashboardById(createdId);
+        var response = reportPortalApiClient.updateDescriptionOfDashboardById(createdId);
         var createdDashboardBody = reportPortalApiClient.getDashboardById(createdId);
-        String updatedDescription = createdDashboardBody.path("description").toString();
+        String updatedDescription = createdDashboardBody.getFiledValueFromJson("description");
         boolean isUpdated = updatedDescription.contains("updated");
 
         //verify
@@ -109,12 +108,12 @@ public class DashboardApiTests extends BaseApiTest {
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
         extractAndSetCreatedDashboard(createdDashboard);
-        var createdId = createdDashboard.path("id").toString();
+        var createdId = createdDashboard.getFiledValueFromJson("id");
 
         //act
-        Response response = reportPortalApiClient.updateDescriptionOfDashboardById(createdId);
+        var response = reportPortalApiClient.updateDescriptionOfDashboardById(createdId);
         var createdDashboardBody = reportPortalApiClient.getDashboardById(createdId);
-        String updatedDescription = createdDashboardBody.path("description").toString();
+        String updatedDescription = createdDashboardBody.getFiledValueFromJson("description");
         boolean isUpdated = updatedDescription.contains("updated!!!!!!!!!");
 
         //verify
@@ -131,12 +130,12 @@ public class DashboardApiTests extends BaseApiTest {
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
         extractAndSetCreatedDashboard(createdDashboard);
-        var createdId = createdDashboard.path("id").toString();
+        var createdId = createdDashboard.getFiledValueFromJson("id");
 
         //act
-        Response response = reportPortalApiClient.updateDescriptionOfDashboardById(createdId + "1");
+        var response = reportPortalApiClient.updateDescriptionOfDashboardById(createdId + "1");
         var createdDashboardBody = reportPortalApiClient.getDashboardById(createdId);
-        String updatedDescription = createdDashboardBody.path("description").toString();
+        String updatedDescription = createdDashboardBody.getFiledValueFromJson("description");
         boolean isUpdated = updatedDescription.contains("updated");
 
         //verify
@@ -153,10 +152,10 @@ public class DashboardApiTests extends BaseApiTest {
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
         extractAndSetCreatedDashboard(createdDashboard);
-        var createdId = createdDashboard.path("id").toString();
+        var createdId = createdDashboard.getFiledValueFromJson("id");
 
         //act
-        Response deleteResponse = reportPortalApiClient.deleteDashboardById(createdId);
+        var deleteResponse = reportPortalApiClient.deleteDashboardById(createdId);
 
         //verify
         Assert.assertEquals(deleteResponse.getStatusCode(), 200);
@@ -170,10 +169,10 @@ public class DashboardApiTests extends BaseApiTest {
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         var createdDashboard = reportPortalApiClient.createDashboardWithName(targetDashboardName);
         extractAndSetCreatedDashboard(createdDashboard);
-        var createdId = createdDashboard.path("id").toString();
+        var createdId = createdDashboard.getFiledValueFromJson("id");
 
         //act
-        Response deleteResponse = reportPortalApiClient.deleteDashboardById(createdId + "1");
+        var deleteResponse = reportPortalApiClient.deleteDashboardById(createdId + "1");
 
         //verify
         Assert.assertEquals(deleteResponse.getStatusCode(), 404);

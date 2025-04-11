@@ -2,6 +2,7 @@ package core.api.OkHttp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import core.api.api_client.OkHttpApiClient;
 import core.config.ConfigProperties;
 import core.config.PropertiesHolder;
 import okhttp3.*;
