@@ -72,11 +72,11 @@ public class DashboardApiTests extends BaseApiTest {
     @org.junit.jupiter.api.Test
     public void getAllDashboardsNegativeTest() {
         //act
-        var response = reportPortalApiClient.getAllDashboards("");
+        var response = reportPortalApiClient.getAllDashboards("1");
 
         //verify
-        Assert.assertEquals(response.getStatusCode(), 400);
-        Assertions.assertEquals(response.getStatusCode(), 400);
+        Assert.assertEquals(response.getStatusCode(), 404);
+        Assertions.assertEquals(response.getStatusCode(), 404);
     }
 
     @Test
