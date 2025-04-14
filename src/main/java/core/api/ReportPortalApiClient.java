@@ -1,31 +1,50 @@
 package core.api;
 
+import core.api.api_client.*;
 import core.config.ConfigProperties;
 import core.config.PropertiesHolder;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import core.meta.HttpClientType;
+import core.model.ReportPortalDashboardsResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ReportPortalApiClient {
-    private final ApiClient defaultClient;
-    private final ConfigProperties configProperties;
+    private final IApiClient defaultClient;
     private final String defaultProject;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportPortalApiClient.class);
 
     public ReportPortalApiClient() {
-        defaultClient = new ApiClient(getDefaultReportPortalSpecification());
-        configProperties = PropertiesHolder.getInstance().getConfigProperties();
+        ConfigProperties configProperties = PropertiesHolder.getInstance().getConfigProperties();
+        HttpClientType clientType = configProperties.httpClientType();
+        var baseUrl = configProperties.rpUrl() + "/api/v1";
+        var token = configProperties.apiKey();
+        CustomRequestData customRequestData = new CustomRequestData();
+        customRequestData.setBaseUri(baseUrl);
+        Map<String, Object> headers = new HashMap<>();
+        headers.put( "Authorization", "bearer" + token);
+        headers.put( "Content-Type", "application/json");
+        customRequestData.setHeaders(headers);
+
+        LOGGER.info("Initializing ReportPortalApiClient with HTTP client: {}", clientType);
+
+        switch (clientType) {
+            case REST_ASSURED -> defaultClient = new RestAssuredApiClient(customRequestData);
+            case OK_HTTP -> defaultClient = new OkHttpApiClient(customRequestData);
+            default -> throw new IllegalArgumentException("Unsupported http client type: " + clientType);
+        }
+
         defaultProject = configProperties.defaultRpProjectName();
     }
 
-    public Response createDashboardWithName(String dashboardName) {
+    public CustomResponse createDashboardWithName(String dashboardName) {
         return createDashboardWithName(dashboardName, defaultProject);
     }
 
-    public Response createDashboardWithName(String dashboardName, String projectName) {
+    public CustomResponse createDashboardWithName(String dashboardName, String projectName) {
+        LOGGER.debug("Creating dashboard '{}' in project '{}'", dashboardName, projectName);
         String url = String.format("/%s/dashboard", projectName);
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("description", "This is a test dashboard");
@@ -33,20 +52,51 @@ public class ReportPortalApiClient {
         return defaultClient.post(url, requestBody);
     }
 
-    public Response getAllDashboards() {
+    public CustomResponse updateDescriptionOfDashboardById(String id) {
+        return updateDescriptionOfDashboardById(id, defaultProject);
+    }
+
+    public CustomResponse updateDescriptionOfDashboardById(String id, String projectName) {
+        LOGGER.debug("Updating dashboard with ID '{}' in project '{}'", id, projectName);
+        String description = getDashboardById(id).getFiledValueFromJson("description") + " - updated";
+        String name = getDashboardById(id).getFiledValueFromJson("name");
+        String url = String.format("/%s/dashboard/%s", projectName, id);
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("description", description);
+        requestBody.put("name", name);
+        return defaultClient.put(url, requestBody);
+    }
+
+    public CustomResponse getAllDashboards() {
         return getAllDashboards(defaultProject);
     }
 
-    public Response getAllDashboards(String projectName) {
+    public CustomResponse getAllDashboards(String projectName) {
+        LOGGER.debug("Retrieving all dashboards for project '{}'", projectName);
+        if (projectName == null || projectName.isBlank()) {
+            LOGGER.error("Project name is null or blank");
+            throw new IllegalArgumentException("Project name must not be blank");
+        }
         String url = String.format("/%s/dashboard", projectName);
         return defaultClient.get(url);
     }
 
-    public Response deleteDashboardById(String id) {
+    public CustomResponse getDashboardById(String id) {
+        return getDashboardById(id, defaultProject);
+    }
+
+    public CustomResponse getDashboardById(String id, String projectName) {
+        LOGGER.debug("Fetching dashboard with ID '{}' from project '{}'", id, projectName);
+        String url = String.format("/%s/dashboard/%s", projectName, id);
+        return defaultClient.get(url);
+    }
+
+    public CustomResponse deleteDashboardById(String id) {
         return deleteDashboardById(id, defaultProject);
     }
 
-    public Response deleteDashboardById(String id, String projectName) {
+    public CustomResponse deleteDashboardById(String id, String projectName) {
+        LOGGER.debug("Deleting dashboard with ID '{}' from project '{}'", id, projectName);
         String url = String.format("/%s/dashboard/%s", projectName, id);
         return defaultClient.delete(url);
     }
@@ -56,20 +106,16 @@ public class ReportPortalApiClient {
     }
 
     public void deleteDashboardByName(String dashboardByName, String projectName) {
+        LOGGER.debug("Attempting to delete dashboard by name '{}' in project '{}'", dashboardByName, projectName);
         var allDashboards = getAllDashboards(projectName);
-        Optional.ofNullable(allDashboards.jsonPath().get(String.format("content.find { it.name == '%s' }.id", dashboardByName))).ifPresent(id -> {
-            deleteDashboardById(id.toString(), projectName);
-        });
-    }
+        ReportPortalDashboardsResponse dashboards = allDashboards.getResponseBodyAsObject(ReportPortalDashboardsResponse.class);
 
-    private RequestSpecification getDefaultReportPortalSpecification() {
-        var properties = PropertiesHolder.getInstance().getConfigProperties();
-        var baseUrl = properties.rpUrl() + "/api/v1";
-        var token = properties.apiKey();
-        return RestAssured.given()
-                .headers("accept", "*/*",
-                        "Authorization", "bearer" + token,
-                        "Content-Type", "application/json")
-                .baseUri(baseUrl);
+        dashboards.content.stream()
+                .filter(d -> dashboardByName.equalsIgnoreCase(d.name))
+                .findFirst()
+                .ifPresent(id -> {
+                    LOGGER.debug("Found dashboard '{}' with ID '{}', proceeding with delete", dashboardByName, id);
+                    deleteDashboardById(id.toString(), projectName);
+                });
     }
 }

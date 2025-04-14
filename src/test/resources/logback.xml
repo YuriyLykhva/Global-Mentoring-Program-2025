@@ -1,25 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
+    <!-- Scan for changes every 60 seconds -->
+    <configurationScan scan="true" scanPeriod="60 seconds"/>
+
+    <!-- Enable Jansi for color support -->
+    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%highlight(%-5level)] [%cyan(%logger{36})] - %msg%n"/>
+
+    <!-- Console appender with color -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
         <encoder>
-            <pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) %blue(%C{1}) [%yellow(thread-%.1t)]: %msg%n%throwable
-            </pattern>
+            <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/test-log.log</file>
-        <append>true</append>
-        <immediateFlush>true</immediateFlush>
+    <!-- Rolling file appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/report-portal-api.log</file>
+
+        <!-- Roll daily and keep 14 days -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/report-portal-api.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>14</maxHistory>
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
+    <!-- Root logger: INFO and above to both console and file -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
     </root>
+
+    <!-- Override logging levels per-package -->
+    <logger name="core.api" level="DEBUG"/>
+    <logger name="core.config" level="WARN"/>
 
 </configuration>

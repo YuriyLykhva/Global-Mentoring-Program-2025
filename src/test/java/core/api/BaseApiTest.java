@@ -1,7 +1,7 @@
 package core.api;
 
 import core.BaseTest;
-import io.restassured.response.Response;
+import core.api.api_client.CustomResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.testng.annotations.AfterMethod;
@@ -28,10 +28,8 @@ public class BaseApiTest extends BaseTest {
         }
     }
 
-    protected void extractAndSetCreatedDashboard(Response response){
-        Optional.ofNullable(response.path("id")).ifPresent(id -> {
-            createdDashboard.set(id.toString());
-        });
+    protected void extractAndSetCreatedDashboard(CustomResponse response){
+        Optional.ofNullable(response.getFiledValueFromJson("id")).ifPresent(createdDashboard::set);
     }
 
 }
