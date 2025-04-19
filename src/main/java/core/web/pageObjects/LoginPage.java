@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 import static core.utils.UiWait.waitForElementLocatedBy;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.*;
 
 public class LoginPage extends BaseReportPortalPage {
 
@@ -16,33 +18,51 @@ public class LoginPage extends BaseReportPortalPage {
 
     public LoginPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this);
+        if(!useSelenide) {
+            PageFactory.initElements(driver, this);
+        }
     }
 
     @Override
     public String pathUrl() {
-        return "/ui/#login";
+        return LOGIN_PATH;
     }
 
     @Override
     public LoginPage openPage(String... params) {
         super.openPage(params);
-        waitForElementLocatedBy(driver, loginButton);
+        if (useSelenide) {
+            $(loginButton).shouldBe(visible);
+        } else {
+            waitForElementLocatedBy(driver, loginButton);
+        }
         return this;
     }
 
     public LoginPage typeLogin(String login) {
-        browserActions.inputText(By.xpath(loginInputLocator), login);
+        if (useSelenide) {
+            $x(loginInputLocator).setValue(login);
+        } else {
+            browserActions.inputText(By.xpath(loginInputLocator), login);
+        }
         return this;
     }
 
     public LoginPage typePassword(String password) {
-        browserActions.inputText(By.xpath(passwordInputLocator), password);
+        if (useSelenide) {
+            $x(passwordInputLocator).setValue(password);
+        } else {
+            browserActions.inputText(By.xpath(passwordInputLocator), password);
+        }
         return this;
     }
 
     public LoginPage clickLoginButton() {
-        browserActions.click(loginButton);
+        if (useSelenide) {
+            $(loginButton).click();
+        } else {
+            browserActions.click(loginButton);
+        }
         return this;
     }
 

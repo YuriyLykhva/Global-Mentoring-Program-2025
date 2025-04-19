@@ -113,9 +113,9 @@ public class ReportPortalApiClient {
         dashboards.content.stream()
                 .filter(d -> dashboardByName.equalsIgnoreCase(d.name))
                 .findFirst()
-                .ifPresent(id -> {
-                    LOGGER.debug("Found dashboard '{}' with ID '{}', proceeding with delete", dashboardByName, id);
-                    deleteDashboardById(id.toString(), projectName);
+                .ifPresent(dashboard -> {
+                    LOGGER.debug("Found dashboard '{}' with ID '{}', proceeding with delete", dashboardByName, dashboard.id);
+                    deleteDashboardById(String.valueOf(dashboard.id), projectName);
                 });
     }
 }

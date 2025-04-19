@@ -8,6 +8,7 @@ public abstract class BasePage {
 
     public abstract String basePageUrl();
     public abstract String pathUrl();
+    public final boolean useSelenide = true;
 
     protected WebDriver driver;
     BrowserActions browserActions = new BrowserActions();
@@ -17,7 +18,12 @@ public abstract class BasePage {
     }
 
     public BasePage openPage(String... params) {
-        WebDriverHolder.getInstance().getWebDriver().get(String.format(basePageUrl() + pathUrl(), params));
+        String fullUrl = String.format(basePageUrl() + pathUrl(), params);
+        if (useSelenide) {
+            com.codeborne.selenide.Selenide.open(fullUrl);
+        } else {
+            WebDriverHolder.getInstance().getWebDriver().get(fullUrl);
+        }
         return this;
     }
 }

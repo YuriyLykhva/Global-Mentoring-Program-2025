@@ -1,5 +1,6 @@
 package core.web.pageObjects;
 
+import com.codeborne.selenide.SelenideElement;
 import core.config.PropertiesHolder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -7,6 +8,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.*;
 import static core.utils.UiWait.waitForElementLocatedBy;
 
 public class DashboardPage extends BaseReportPortalPage {
@@ -30,55 +33,91 @@ public class DashboardPage extends BaseReportPortalPage {
 
     @Override
     public DashboardPage openPage(String... params) {
-        if(params.length < 1){
+        if (params.length < 1) {
             //if we have no project specified -> then pick up default
             params = new String[]{PropertiesHolder.getInstance().getConfigProperties().defaultRpProjectName()};
         }
         super.openPage(params);
-        waitForElementLocatedBy(driver, allDashboardsTitle);
+
+        if (useSelenide) {
+            $(allDashboardsTitle).shouldBe(visible);
+        } else {
+            waitForElementLocatedBy(driver, allDashboardsTitle);
+        }
         return this;
     }
 
     public String getAllDashboardsTitle() {
-        return browserActions.getText(allDashboardsTitle);
+        if (useSelenide) {
+            return $(allDashboardsTitle).getText();
+        } else {
+            return browserActions.getText(allDashboardsTitle);
+        }
     }
 
     public DashboardPage clickAddDashboardButton() {
-        browserActions.click(addNewDashboardButton);
+        if (useSelenide) {
+            $(addNewDashboardButton).click();
+        } else {
+            browserActions.click(addNewDashboardButton);
+        }
         return this;
     }
 
     public DashboardPage typeDashboardName(String testDashboard) {
-        browserActions.inputText(dashboardNameField, testDashboard);
+        if (useSelenide) {
+            $(dashboardNameField).setValue(testDashboard);
+        } else {
+            browserActions.inputText(dashboardNameField, testDashboard);
+        }
         return this;
     }
 
     public DashboardPage clickCreateButton() {
-        browserActions.click(createButton);
+        if (useSelenide) {
+            $(createButton).click();
+        } else {
+            browserActions.click(createButton);
+        }
         return this;
     }
 
     public DashboardPage returnToDashboardPage() {
-        browserActions.waitUntilElementBeVisible(allDashboardsPage);
-        browserActions.click(allDashboardsPage);
+        if (useSelenide) {
+            $(allDashboardsPage).shouldBe(visible).click();
+        } else {
+            browserActions.waitUntilElementBeVisible(allDashboardsPage);
+            browserActions.click(allDashboardsPage);
+        }
         return this;
     }
 
     public List<WebElement> getDasboardsList() {
-        List<WebElement> dashboards;
-        try {
-            dashboards = browserActions.waitUntilElementsListIsNotEmpty(dashboardsList);
-        } catch (Exception e) {
-            return null;
+        if (useSelenide) {
+            return $$(dashboardsList).stream()
+                    .map(SelenideElement::toWebElement)
+                    .toList();
+        } else {
+            try {
+                return browserActions.waitUntilElementsListIsNotEmpty(dashboardsList);
+            } catch (Exception e) {
+                return null;
+            }
         }
-        return dashboards;
     }
 
     public DashboardPage deleteDashboardByName(String dashboardName) {
         String deleteDashboardByNameButton =
                 "//*[text()='" + dashboardName + "']//following-sibling::div//i[contains(@class, 'icon__icon-delete')]";
-        browserActions.jsClick(By.xpath(deleteDashboardByNameButton));
-        browserActions.click(confirmDeleteButton);
+        By deleteButtonLocator = By.xpath(deleteDashboardByNameButton);
+
+        if (useSelenide) {
+            $x(deleteDashboardByNameButton).click();
+            $(confirmDeleteButton).click();
+        } else {
+            browserActions.jsClick(deleteButtonLocator);
+            browserActions.click(confirmDeleteButton);
+        }
         return this;
     }
 
