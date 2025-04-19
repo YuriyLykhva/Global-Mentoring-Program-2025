@@ -5,6 +5,8 @@ import core.config.PropertiesHolder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -13,6 +15,8 @@ import static com.codeborne.selenide.Selenide.*;
 import static core.utils.UiWait.waitForElementLocatedBy;
 
 public class DashboardPage extends BaseReportPortalPage {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardPage.class);
+
 
     private final By allDashboardsTitle = By.cssSelector("span[title='All Dashboards']");
     private final By addNewDashboardButton = By.xpath("//*[text()='Add New Dashboard']");
@@ -79,6 +83,7 @@ public class DashboardPage extends BaseReportPortalPage {
         } else {
             browserActions.click(createButton);
         }
+        LOGGER.info("Create button clicked");
         return this;
     }
 
@@ -118,6 +123,7 @@ public class DashboardPage extends BaseReportPortalPage {
             browserActions.jsClick(deleteButtonLocator);
             browserActions.click(confirmDeleteButton);
         }
+        LOGGER.info("Dashboard is deleted");
         return this;
     }
 

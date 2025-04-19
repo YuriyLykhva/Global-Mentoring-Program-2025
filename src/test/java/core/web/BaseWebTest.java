@@ -28,7 +28,7 @@ public class BaseWebTest extends BaseTest {
         this.webConfiguration = new WebConfiguration();
         this.browserActions = new BrowserActions();
         loadConfigurationFromFile();
-        this.useSelenide = true;
+        this.useSelenide = "selenide".equalsIgnoreCase(PropertiesHolder.getInstance().getConfigProperties().engine());
     }
 
     private void loadConfigurationFromFile() {

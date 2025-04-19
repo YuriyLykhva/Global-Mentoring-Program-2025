@@ -55,5 +55,7 @@ public interface ConfigProperties extends Config {
     Long readTimeOutSeconds();
     @Key("httpClientType")
     HttpClientType httpClientType();
+    @Key("ui.engine")
+    String engine();
 
 }
