@@ -1,6 +1,8 @@
 package core.utils;
 
+import com.codeborne.selenide.SelenideElement;
 import core.driver.WebDriverHolder;
+import core.web.pageObjects.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -8,6 +10,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
+
+import static com.codeborne.selenide.Selenide.$;
 
 public class BrowserActions {
 
@@ -87,6 +91,27 @@ public class BrowserActions {
 
     public BrowserActions refreshPage() {
         WebDriverHolder.getInstance().getWebDriver().navigate().refresh();
+        return this;
+    }
+
+    public BrowserActions dragAndDropByOffset(By source, int xOffset, int yOffset) {
+        if (BasePage.useSelenide) {
+            SelenideElement element = $(source);
+            Actions actions = new Actions(WebDriverHolder.getInstance().getWebDriver());
+            actions.clickAndHold(element)
+                    .moveByOffset(xOffset, yOffset)
+                    .release()
+                    .build()
+                    .perform();
+        } else {
+            WebElement element = getWebElement(source);
+            Actions actions = new Actions(WebDriverHolder.getInstance().getWebDriver());
+            actions.clickAndHold(element)
+                    .moveByOffset(xOffset, yOffset)
+                    .release()
+                    .build()
+                    .perform();
+        }
         return this;
     }
 

@@ -13,8 +13,8 @@ public abstract class BasePage {
 
     public abstract String basePageUrl();
     public abstract String pathUrl();
-    public String uiEngine = PropertiesHolder.getInstance().getConfigProperties().engine();
-    public final boolean useSelenide = "selenide".equalsIgnoreCase(uiEngine);
+    public static String uiEngine = PropertiesHolder.getInstance().getConfigProperties().engine();
+    public static final boolean useSelenide = "selenide".equalsIgnoreCase(uiEngine);
 
     protected WebDriver driver;
     BrowserActions browserActions = new BrowserActions();

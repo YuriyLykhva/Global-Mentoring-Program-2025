@@ -69,6 +69,7 @@ public class LoginPage extends BaseReportPortalPage {
         } else {
             browserActions.click(loginButton);
         }
+        LOGGER.info("Clicked login button");
         return this;
     }
 

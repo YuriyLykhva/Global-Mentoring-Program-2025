@@ -1,130 +1,74 @@
 package core.web.pageObjects;
 
-import com.codeborne.selenide.SelenideElement;
 import core.config.PropertiesHolder;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
-import static core.utils.UiWait.waitForElementLocatedBy;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class DashboardPage extends BaseReportPortalPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardPage.class);
 
+    private final By widgetHandle = By.cssSelector(".widgetHeader__widget-header--ZGtj9");
 
-    private final By allDashboardsTitle = By.cssSelector("span[title='All Dashboards']");
-    private final By addNewDashboardButton = By.xpath("//*[text()='Add New Dashboard']");
-    private final By dashboardNameField = By.cssSelector("input[placeholder='Enter dashboard name']");
-    private final By createButton = By.xpath("//*[text()='Add']");
-    private final By allDashboardsPage = By.xpath("//*[text()='All Dashboards']");
-    private final By dashboardsList = By.xpath("//*[contains(@class, 'gridRow__grid-row-wrapper')]");
-    private final By confirmDeleteButton = By.xpath("//button[text()='Delete']");
-
-    @Override
-    public String pathUrl() {
-        return "/ui/#%s/dashboard";
-    }
+    private static final String DASHBOARD_PATH = "/ui/#%s/dashboard/1049";
 
     public DashboardPage(WebDriver driver) {
         super(driver);
+        if (!useSelenide) {
+            PageFactory.initElements(driver, this);
+        }
+    }
+
+    @Override
+    public String pathUrl() {
+        return DASHBOARD_PATH;
     }
 
     @Override
     public DashboardPage openPage(String... params) {
+        LOGGER.info("Dashboard GREEN-50 opens");
         if (params.length < 1) {
-            //if we have no project specified -> then pick up default
             params = new String[]{PropertiesHolder.getInstance().getConfigProperties().defaultRpProjectName()};
         }
         super.openPage(params);
-
         if (useSelenide) {
-            $(allDashboardsTitle).shouldBe(visible);
+            $x("(//div[contains(@class, 'react-grid-item')])[1]").shouldBe(visible);
         } else {
-            waitForElementLocatedBy(driver, allDashboardsTitle);
+            browserActions.waitUntilElementBeVisible(widgetHandle);
         }
         return this;
     }
 
-    public String getAllDashboardsTitle() {
-        if (useSelenide) {
-            return $(allDashboardsTitle).getText();
-        } else {
-            return browserActions.getText(allDashboardsTitle);
-        }
-    }
-
-    public DashboardPage clickAddDashboardButton() {
-        if (useSelenide) {
-            $(addNewDashboardButton).click();
-        } else {
-            browserActions.click(addNewDashboardButton);
-        }
+    public DashboardPage dragWidgetByOffset(int xOffset, int yOffset) {
+        LOGGER.info("Dragging widget by offset: x={}, y={}", xOffset, yOffset);
+        browserActions.dragAndDropByOffset(widgetHandle, xOffset, yOffset);
         return this;
     }
 
-    public DashboardPage typeDashboardName(String testDashboard) {
+    public boolean isWidgetMovedSuccessfully(int initialX, int initialY) {
+        Point newPosition;
         if (useSelenide) {
-            $(dashboardNameField).setValue(testDashboard);
+            newPosition = $(widgetHandle).getLocation();
         } else {
-            browserActions.inputText(dashboardNameField, testDashboard);
+            newPosition = browserActions.getWebElement(widgetHandle).getLocation();
         }
-        return this;
+
+        int newX = newPosition.getX();
+        int newY = newPosition.getY();
+
+        return newX != initialX || newY != initialY;
     }
 
-    public DashboardPage clickCreateButton() {
+    public Point getWidgetLocation() {
         if (useSelenide) {
-            $(createButton).click();
+            return $(widgetHandle).getLocation();
         } else {
-            browserActions.click(createButton);
-        }
-        LOGGER.info("Create button clicked");
-        return this;
-    }
-
-    public DashboardPage returnToDashboardPage() {
-        if (useSelenide) {
-            $(allDashboardsPage).shouldBe(visible).click();
-        } else {
-            browserActions.waitUntilElementBeVisible(allDashboardsPage);
-            browserActions.click(allDashboardsPage);
-        }
-        return this;
-    }
-
-    public List<WebElement> getDasboardsList() {
-        if (useSelenide) {
-            return $$(dashboardsList).stream()
-                    .map(SelenideElement::toWebElement)
-                    .toList();
-        } else {
-            try {
-                return browserActions.waitUntilElementsListIsNotEmpty(dashboardsList);
-            } catch (Exception e) {
-                return null;
-            }
+            return browserActions.getWebElement(widgetHandle).getLocation();
         }
     }
-
-    public DashboardPage deleteDashboardByName(String dashboardName) {
-        String deleteDashboardByNameButton =
-                "//*[text()='" + dashboardName + "']//following-sibling::div//i[contains(@class, 'icon__icon-delete')]";
-        By deleteButtonLocator = By.xpath(deleteDashboardByNameButton);
-
-        if (useSelenide) {
-            $x(deleteDashboardByNameButton).click();
-            $(confirmDeleteButton).click();
-        } else {
-            browserActions.jsClick(deleteButtonLocator);
-            browserActions.click(confirmDeleteButton);
-        }
-        LOGGER.info("Dashboard is deleted");
-        return this;
-    }
-
 }
