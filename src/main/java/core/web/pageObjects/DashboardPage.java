@@ -14,6 +14,7 @@ public class DashboardPage extends BaseReportPortalPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardPage.class);
 
     private final By widgetHandle = By.cssSelector(".widgetHeader__widget-header--ZGtj9");
+    private final By widgetResizeHandle = By.cssSelector(".react-resizable-handle.react-resizable-handle-se");
 
     private static final String DASHBOARD_PATH = "/ui/#%s/dashboard/1049";
 
@@ -71,4 +72,26 @@ public class DashboardPage extends BaseReportPortalPage {
             return browserActions.getWebElement(widgetHandle).getLocation();
         }
     }
+
+    public DashboardPage resizeWidgetByOffset(int xOffset, int yOffset) {
+        LOGGER.info("Resizing widget by offset: x={}, y={}", xOffset, yOffset);
+        browserActions.resizeByOffset(widgetResizeHandle, xOffset, yOffset);
+        return this;
+    }
+
+    public Dimension getWidgetSize() {
+        if (useSelenide) {
+            return $(widgetHandle).getSize();
+        } else {
+            return browserActions.getWebElement(widgetHandle).getSize();
+        }
+    }
+
+    public boolean isWidgetResizedSuccessfully(Dimension initialSize) {
+        Dimension newSize = getWidgetSize();
+        boolean resized = !initialSize.equals(newSize);
+        LOGGER.info("Widget initial size: {}, new size: {}, resized: {}", initialSize, newSize, resized);
+        return resized;
+    }
+
 }
