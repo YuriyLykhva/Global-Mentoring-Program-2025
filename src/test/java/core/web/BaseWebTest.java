@@ -42,6 +42,9 @@ public class BaseWebTest extends BaseTest {
         webConfiguration.setTimeOutSeconds(config.timeOutSeconds());
         webConfiguration.setPollingTimeOutMilliSeconds(config.pollingTimeOutMilliSeconds());
         webConfiguration.setReadTimeOutSeconds(config.readTimeOutSeconds());
+        webConfiguration.setPlatform(config.platform());
+        webConfiguration.setRemoteUserName(config.remoteUsername());
+        webConfiguration.setRemoteAccessKey(config.remoteAccessKey());
     }
 
     @BeforeEach

@@ -7,8 +7,12 @@ import core.driver.strategy.FirefoxStrategy;
 import java.util.Map;
 
 public class DriverMapping {
+
     private static final Map<String, Class<? extends AbstractDriverStrategy>> DRIVER_MAPPINGS =
-            Map.of("chrome", ChromeStrategy.class, "firefox", FirefoxStrategy.class);
+            Map.of(
+                    "chrome", ChromeStrategy.class,
+                    "firefox", FirefoxStrategy.class
+            );
 
     public static AbstractDriverStrategy getDriverStrategy(WebConfiguration webConfiguration) {
         String driverName = webConfiguration.getBrowserName();

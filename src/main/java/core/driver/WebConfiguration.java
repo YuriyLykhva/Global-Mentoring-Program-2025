@@ -21,5 +21,8 @@ public class WebConfiguration {
     private Long pollingTimeOutMilliSeconds;
     private Long readTimeOutSeconds;
     private Map<String, String> remoteCapabilities;
+    private String remoteUserName;
+    private String remoteAccessKey;
+    private String platform;
 
 }
