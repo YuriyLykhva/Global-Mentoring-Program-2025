@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -105,7 +106,7 @@ public class AllDashboardsPage extends BaseReportPortalPage {
             try {
                 return browserActions.waitUntilElementsListIsNotEmpty(dashboardsList);
             } catch (Exception e) {
-                return null;
+                return Collections.emptyList();
             }
         }
     }
