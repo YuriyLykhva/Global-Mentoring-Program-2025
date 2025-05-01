@@ -21,8 +21,8 @@ public interface ConfigProperties extends Config {
     // mvn clean test -Denv=dev -Dcucumber.filter.tags="@API"
     // mvn clean test "-Dcucumber.filter.tags=@API" -Denv=dev
 
-
     // -ea -Denv=demo -Drp.password=1q2w3e -Drp.api.key=test123_08OFgrPXRjqJfGVTL53G-_2vN5-vvBYoJituz-Jo-eUcROJeMnUB1ruNnA7TPa3y
+    // -ea -Denv=dev -DaccessKey=LT_orwS2kuFAkGo0NT06yN4wlpGdIVEGodCFSoSdVrjJoYQGuc
     // -ea -Denv=dev -Drp.password=${password} -Drp.api.key=${token} -DprojectName=2025-project
 
 
@@ -55,5 +55,14 @@ public interface ConfigProperties extends Config {
     Long readTimeOutSeconds();
     @Key("httpClientType")
     HttpClientType httpClientType();
+    @Key("ui.engine")
+    String engine();
 
+    //lt props
+    @Key("remote.username")
+    String remoteUsername();
+    @Key("remote.accessKey")
+    String remoteAccessKey();
+    @Key("platform")
+    String platform();
 }

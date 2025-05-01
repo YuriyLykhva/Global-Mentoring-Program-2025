@@ -1,13 +1,18 @@
 package core.utils;
 
+import com.codeborne.selenide.SelenideElement;
 import core.driver.WebDriverHolder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import java.util.List;
+
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+import static core.web.pageObjects.BasePage.useSelenide;
 
 public class BrowserActions {
 
@@ -88,6 +93,48 @@ public class BrowserActions {
     public BrowserActions refreshPage() {
         WebDriverHolder.getInstance().getWebDriver().navigate().refresh();
         return this;
+    }
+
+    public BrowserActions dragAndDropByOffset(By source, int xOffset, int yOffset) {
+        if (useSelenide) {
+            SelenideElement element = $(source);
+            Actions actions = new Actions(WebDriverHolder.getInstance().getWebDriver());
+            actions.clickAndHold(element)
+                    .moveByOffset(xOffset, yOffset)
+                    .release()
+                    .build()
+                    .perform();
+        } else {
+            WebElement element = getWebElement(source);
+            Actions actions = new Actions(WebDriverHolder.getInstance().getWebDriver());
+            actions.clickAndHold(element)
+                    .moveByOffset(xOffset, yOffset)
+                    .release()
+                    .build()
+                    .perform();
+        }
+        return this;
+    }
+
+    public void resizeByOffset(By locator, int xOffset, int yOffset) {
+        WebDriver driver = WebDriverHolder.getInstance().getWebDriver();
+        Actions actions = new Actions(driver);
+
+        if (useSelenide) {
+            SelenideElement element = $(locator).shouldBe(visible).hover();
+            scrollToElement(element.toWebElement());
+            actions.clickAndHold(element)
+                    .moveByOffset(xOffset, yOffset)
+                    .release()
+                    .perform();
+        } else {
+            WebElement element = getWebElement(locator);
+            scrollToElement(element);
+            actions.clickAndHold(element)
+                    .moveByOffset(xOffset, yOffset)
+                    .release()
+                    .perform();
+        }
     }
 
 }

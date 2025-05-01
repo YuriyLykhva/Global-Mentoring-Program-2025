@@ -4,7 +4,7 @@ import core.api.ReportPortalApiClient;
 import core.driver.WebDriverHolder;
 import core.model.User;
 import core.utils.RandomStringGenerator;
-import core.web.pageObjects.DashboardPage;
+import core.web.pageObjects.AllDashboardsPage;
 import core.web.pageObjects.LoginPage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -51,7 +51,7 @@ public class DeleteDashboardTest extends BaseWebTest {
     public void deleteDashboardDataDrivenTest(String targetDashboardName) {
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
-        DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
+        AllDashboardsPage dashboardPage = new AllDashboardsPage(WebDriverHolder.getInstance().getWebDriver());
 
         createdDashboard.set(targetDashboardName);
 
@@ -96,7 +96,7 @@ public class DeleteDashboardTest extends BaseWebTest {
     public void deleteDashboardTest() {
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
-        DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
+        AllDashboardsPage dashboardPage = new AllDashboardsPage(WebDriverHolder.getInstance().getWebDriver());
 
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
         createdDashboard.set(targetDashboardName);

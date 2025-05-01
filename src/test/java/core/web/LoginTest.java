@@ -2,7 +2,7 @@ package core.web;
 
 import core.driver.WebDriverHolder;
 import core.model.User;
-import core.web.pageObjects.DashboardPage;
+import core.web.pageObjects.AllDashboardsPage;
 import core.web.pageObjects.LoginPage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ public class LoginTest extends BaseWebTest {
     public void loginTest() {
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
-        DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
+        AllDashboardsPage dashboardPage = new AllDashboardsPage(WebDriverHolder.getInstance().getWebDriver());
 
         loginPage
                 .openPage()

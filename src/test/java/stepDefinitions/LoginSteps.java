@@ -2,7 +2,7 @@ package stepDefinitions;
 
 import core.driver.WebDriverHolder;
 import core.model.User;
-import core.web.pageObjects.DashboardPage;
+import core.web.pageObjects.AllDashboardsPage;
 import core.web.pageObjects.LoginPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -34,7 +34,7 @@ public class LoginSteps {
 
     @Then("User should see the dashboard page")
     public void user_should_see_the_dashboard_page() {
-        DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
+        AllDashboardsPage dashboardPage = new AllDashboardsPage(WebDriverHolder.getInstance().getWebDriver());
         dashboardPage.openPage();
         String allDashboardsTitle = dashboardPage.getAllDashboardsTitle();
         Assert.assertEquals(allDashboardsTitle, "ALL DASHBOARDS", "User is not logged in!");

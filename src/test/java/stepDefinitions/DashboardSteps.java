@@ -2,7 +2,7 @@ package stepDefinitions;
 
 import core.driver.WebDriverHolder;
 import core.utils.RandomStringGenerator;
-import core.web.pageObjects.DashboardPage;
+import core.web.pageObjects.AllDashboardsPage;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebElement;
@@ -16,7 +16,7 @@ import java.util.List;
 public class DashboardSteps {
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardSteps.class);
 
-    DashboardPage dashboardPage = new DashboardPage(WebDriverHolder.getInstance().getWebDriver());
+    AllDashboardsPage dashboardPage = new AllDashboardsPage(WebDriverHolder.getInstance().getWebDriver());
     String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
     List<WebElement> dashboardListAfterAddingNew;
 

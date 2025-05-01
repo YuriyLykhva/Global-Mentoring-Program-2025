@@ -8,12 +8,15 @@ import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.ConcurrentModificationException;
 import java.util.Objects;
 
 public class WebDriverHolder {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebDriverHolder.class);
 
     private final static ThreadLocal<WebDriver> webDriver = new InheritableThreadLocal<>();
     private final static ThreadLocal<FluentWait<WebDriver>> webDriverWait = new InheritableThreadLocal<>();
@@ -36,6 +39,12 @@ public class WebDriverHolder {
 
     public void setDriver(WebConfiguration webConfiguration) {
         this.webConfiguration = webConfiguration;
+        if (isRemoteRun()) {
+            LOGGER.info("Remote WebDriver execution enabled. Using remote strategy.");
+        } else {
+            LOGGER.info("Local WebDriver execution enabled. Using local strategy.");
+        }
+
         WebDriver driver = DriverMapping.getDriverStrategy(webConfiguration).getDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ZERO);
         webDriver.set(driver);

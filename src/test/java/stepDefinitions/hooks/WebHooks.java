@@ -32,6 +32,9 @@ public class WebHooks {
         webConfiguration.setTimeOutSeconds(config.timeOutSeconds());
         webConfiguration.setPollingTimeOutMilliSeconds(config.pollingTimeOutMilliSeconds());
         webConfiguration.setReadTimeOutSeconds(config.readTimeOutSeconds());
+        webConfiguration.setPlatform(config.platform());
+        webConfiguration.setRemoteUserName(config.remoteUsername());
+        webConfiguration.setRemoteAccessKey(config.remoteAccessKey());
     }
 
     @Before("@WEB")
