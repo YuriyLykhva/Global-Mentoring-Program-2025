@@ -52,7 +52,9 @@ pipeline {
                 script {
                     def mvn = tool 'Maven-3.9.9';
                     withSonarQubeEnv('Local SonarQube') {
-                        bat "${mvn}/bin/mvn sonar:sonar -Dsonar.projectKey=RP-Global-mentoring -Dsonar.projectName='RP Global Mentoring' -Dsonar.sources=."
+                        withCredentials([string(credentialsId: 'sonarqube-auth-token', variable: 'SONAR_TOKEN')]) {
+                            bat "${mvn}/bin/mvn sonar:sonar -Dsonar.projectKey=RP-Global-mentoring -Dsonar.projectName='RP Global Mentoring' -Dsonar.sources=. -Dsonar.login=%SONAR_TOKEN%"
+                        }
                     }
                 }
             }
