@@ -48,9 +48,13 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            def mvn = tool 'Default Maven';
-            withSonarQubeEnv() {
-                sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=RP-Global-mentoring"
+            steps {
+                script {
+                    def mvn = tool 'Default Maven';
+                    withSonarQubeEnv() {
+                        bat "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=RP-Global-mentoring"
+                    }
+                }
             }
         }
 }
