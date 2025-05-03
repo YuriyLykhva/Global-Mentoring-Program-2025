@@ -56,9 +56,9 @@ pipeline {
                             bat "${mvn}/bin/mvn sonar:sonar " +
                             "-Dsonar.projectKey=RP-Global-mentoring " +
                             "-Dsonar.projectName='RP' " +
-                            -Dsonar.sources=src/main/java " +
-                            -Dsonar.tests=src/test/java " + 
-                            -Dsonar.login=%SONAR_TOKEN%"
+                            "-Dsonar.sources=src/main/java " +
+                            "-Dsonar.tests=src/test/java " + 
+                            "-Dsonar.login=%SONAR_TOKEN%"
                         }
                     }
                 }
