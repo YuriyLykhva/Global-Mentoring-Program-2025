@@ -41,7 +41,7 @@ pipeline {
                     string(credentialsId: 'b964cb35-5664-4ab4-9dba-3d7e416632fc', variable: 'RP_PASSWORD_VAR'),
                     string(credentialsId: 'edc2b07e-ffe0-47c1-a680-a9c13aca7705', variable: 'RP_TOKEN_VAR')
                 ]) {
-                    bat "mvn test -Denv=${params.env} -Drp.password=%RP_PASSWORD_VAR% -Drp.api.key=%RP_TOKEN_VAR% -Dtest=${params.test}"
+                    bat "mvn test verify -Denv=${params.env} -Drp.password=%RP_PASSWORD_VAR% -Drp.api.key=%RP_TOKEN_VAR% -Dtest=${params.test}"
                     junit 'target/surefire-reports/*.xml'
                 }
             }
@@ -57,7 +57,8 @@ pipeline {
                             "-Dsonar.projectKey=RP1 " +
                             "-Dsonar.projectName='RP1' " +
                             "-Dsonar.sources=src/main/java " +
-                            "-Dsonar.tests=src/test/java " + 
+                            "-Dsonar.tests=src/test/java " +
+                            "-Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml " +
                             "-Dsonar.login=%SONAR_TOKEN%"
                         }
                     }
