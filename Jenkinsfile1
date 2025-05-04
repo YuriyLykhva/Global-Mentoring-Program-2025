@@ -52,7 +52,7 @@ pipeline {
                 script {
                     def mvn = tool 'Maven-3.9.9';
                     withSonarQubeEnv('Local SonarQube') {
-                        withCredentials([string(credentialsId: 'sonarqube-token-1', variable: 'SONAR_TOKEN')]) {
+                        withCredentials([string(credentialsId: 'sonarqube-token-rp1', variable: 'SONAR_TOKEN')]) {
                             bat "${mvn}/bin/mvn sonar:sonar " +
                             "-Dsonar.projectKey=RP1 " +
                             "-Dsonar.projectName='RP1' " +
