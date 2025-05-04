@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'env', choices: ['dev', 'demo'], description: 'Environment name')
+        choice(name: 'test', choices: [
+            'core.api.DashboardApiTests', 
+            'core.web.DragAndDropWidgetTest',
+            'runners.DashboardTestRunner'
+        ], description: 'Test name')
+    }
+
+    tools {
+        maven 'Maven-3.9.9'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/YuriyLykhva/Global-Mentoring-Program-2025.git',
+                    branch: 'Module_9_CI'
+                
+                //checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'b964cb35-5664-4ab4-9dba-3d7e416632fc', variable: 'RP_PASSWORD_VAR'),
+                    string(credentialsId: 'edc2b07e-ffe0-47c1-a680-a9c13aca7705', variable: 'RP_TOKEN_VAR')
+                ]) {
+                    bat "mvn clean install -Denv=${params.env} -Drp.password=%RP_PASSWORD_VAR% -Drp.api.key=%RP_TOKEN_VAR% -DskipTests"
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                withCredentials([
+                    string(credentialsId: 'b964cb35-5664-4ab4-9dba-3d7e416632fc', variable: 'RP_PASSWORD_VAR'),
+                    string(credentialsId: 'edc2b07e-ffe0-47c1-a680-a9c13aca7705', variable: 'RP_TOKEN_VAR')
+                ]) {
+                    bat "mvn test -Denv=${params.env} -Drp.password=%RP_PASSWORD_VAR% -Drp.api.key=%RP_TOKEN_VAR% -Dtest=${params.test}"
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def mvn = tool 'Maven-3.9.9';
+                    withSonarQubeEnv('Local SonarQube') {
+                        withCredentials([string(credentialsId: 'sonarqube-token-1', variable: 'SONAR_TOKEN')]) {
+                            bat "${mvn}/bin/mvn sonar:sonar " +
+                            "-Dsonar.projectKey=RP1 " +
+                            "-Dsonar.projectName='RP1' " +
+                            "-Dsonar.sources=src/main/java " +
+                            "-Dsonar.tests=src/test/java " + 
+                            "-Dsonar.login=%SONAR_TOKEN%"
+                        }
+                    }
+                }
+            }
+        }
+}
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+    }
+}
