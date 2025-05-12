@@ -65,4 +65,8 @@ public interface ConfigProperties extends Config {
     String remoteAccessKey();
     @Key("platform")
     String platform();
+
+    //slack props
+    @Key("slack.key")
+    String slackKey();
 }

@@ -1,5 +1,6 @@
 package core.utils;
 
+import core.config.PropertiesHolder;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -19,10 +20,11 @@ public class SlackService {
 
     public void postNotification(String message) throws IOException {
         String json = String.format("{\"text\":\"%s\"}", message);
+        String slackKey = PropertiesHolder.getInstance().getConfigProperties().slackKey();
 
         RequestBody body = RequestBody.create(json, JSON);
 
-        String webhookUrl = "https://hooks.slack.com/services/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";
+        String webhookUrl = "https://hooks.slack.com/services/" + slackKey;
         Request request = new Request.Builder()
                 .url(webhookUrl)
                 .post(body)
