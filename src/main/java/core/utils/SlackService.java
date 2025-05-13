@@ -6,10 +6,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class SlackService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SlackService.class);
 
     private final OkHttpClient client;
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -32,6 +35,7 @@ public class SlackService {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
+                LOGGER.info("Failed to send Slack notification: {}", response);
                 throw new IOException("Failed to send Slack notification: " + response);
             }
         }

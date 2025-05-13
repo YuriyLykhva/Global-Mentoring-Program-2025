@@ -2,6 +2,7 @@ package core.web;
 
 import core.driver.WebDriverHolder;
 import core.model.User;
+import core.utils.JiraIntegration;
 import core.web.pageObjects.AllDashboardsPage;
 import core.web.pageObjects.DashboardPage;
 import core.web.pageObjects.LoginPage;
@@ -17,6 +18,9 @@ public class DragAndDropWidgetTest extends BaseWebTest {
     @Test
     @org.testng.annotations.Test
     public void dragAndDropWidgetTest() {
+        String testCaseId = "KAN-4";
+        JiraIntegration.updateTestStatus("Running", testCaseId, "Test execution started.");
+
         int xOffset = 340;
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
@@ -38,7 +42,16 @@ public class DragAndDropWidgetTest extends BaseWebTest {
         LOGGER.info("Widget is moved to the right on {} px", xOffset);
 
         boolean isMoved = dashboardPage.isWidgetMovedSuccessfully(initialPos.getX(), initialPos.getY());
-        Assertions.assertTrue(isMoved, "Widget was not moved successfully!");
+
+        // Jira integration
+        if (isMoved) {
+            JiraIntegration.updateTestStatus("Passed", testCaseId, "Widget was moved successfully.");
+        } else {
+            String errorMessage = "Failed to move widget.";
+            JiraIntegration.updateTestStatus("Failed", testCaseId, errorMessage);
+        }
+
+        Assertions.assertTrue(isMoved, "Widget was not moved!");
 
         dashboardPage.dragWidgetByOffset(-xOffset, 0);
         LOGGER.info("Widget is moved to the left on {} px", xOffset);

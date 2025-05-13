@@ -41,6 +41,7 @@
         <okhttp.version>4.12.0</okhttp.version>
         <vavr.version>0.10.4</vavr.version>
         <jacoco.version>0.8.12</jacoco.version>
+        <json.version>20250107</json.version>
     </properties>
 
     <dependencies>
@@ -180,6 +181,11 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${jacoco.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version>
         </dependency>
     </dependencies>
 

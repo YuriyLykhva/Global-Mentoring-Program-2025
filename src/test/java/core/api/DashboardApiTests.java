@@ -1,5 +1,6 @@
 package core.api;
 
+import core.utils.JiraIntegration;
 import core.utils.RandomStringGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.testng.Assert;
@@ -12,21 +13,34 @@ public class DashboardApiTests extends BaseApiTest {
     public void createDashboardTest() {
         //prepare
         String targetDashboardName = RandomStringGenerator.getTargetDashboardName();
+        String testCaseId = "KAN-1";
+        JiraIntegration.updateTestStatus("Running", testCaseId, "Test execution started.");
 
         //act
         var response = reportPortalApiClient.createDashboardWithName(targetDashboardName);
         extractAndSetCreatedDashboard(response);
         var createdId = response.getFiledValueFromJson("id");
         var createdDashboardBody = reportPortalApiClient.getDashboardById(createdId);
-        String dashboardName = createdDashboardBody.getFiledValueFromJson("name");
-        boolean isCreated = dashboardName.equals(targetDashboardName);
+        String actualDashboardName = createdDashboardBody.getFiledValueFromJson("name");
+        boolean isCreated = actualDashboardName.equals(targetDashboardName);
 
         //verify
         Assert.assertEquals(response.getStatusCode(), 201);
         Assertions.assertEquals(response.getStatusCode(), 201);
-        Assert.assertTrue(isCreated);
-        Assertions.assertTrue(isCreated);
+        Assert.assertTrue(isCreated, "Dashboard name should match the target name. Expected: " + targetDashboardName + ", Actual: " + actualDashboardName);
+        Assertions.assertTrue(isCreated, "Dashboard name should match the target name. Expected: " + targetDashboardName + ", Actual: " + actualDashboardName);
+
+        //Jira integration
+        if (response.getStatusCode() == 201) {
+            JiraIntegration.updateTestStatus("Passed", testCaseId, "Dashboard created successfully.");
+        } else {
+            String errorMessage = "Failed to create dashboard. Status code: " + response.getStatusCode() +
+                    ". Response body: " + response.getResponseBodyString();
+            JiraIntegration.updateTestStatus("Failed", testCaseId, errorMessage);
+            Assertions.fail(errorMessage);
+        }
     }
+
 
     @Test
     @org.junit.jupiter.api.Test
