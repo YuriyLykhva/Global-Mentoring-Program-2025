@@ -1,5 +1,6 @@
 package core.web;
 
+import core.annotations.JiraId;
 import core.driver.WebDriverHolder;
 import core.model.User;
 import core.utils.JiraIntegration;
@@ -17,6 +18,7 @@ public class AddDashboardTest extends BaseWebTest {
 
     @Test
     @org.testng.annotations.Test
+    @JiraId("KAN-2")
     public void addDashboardTest() {
         String testCaseId = "KAN-2";
         JiraIntegration.updateTestStatus("Running", testCaseId, "Test execution started.");

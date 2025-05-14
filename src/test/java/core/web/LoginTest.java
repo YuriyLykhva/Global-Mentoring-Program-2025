@@ -1,5 +1,6 @@
 package core.web;
 
+import core.annotations.JiraId;
 import core.driver.WebDriverHolder;
 import core.model.User;
 import core.utils.JiraIntegration;
@@ -15,6 +16,7 @@ public class LoginTest extends BaseWebTest {
 
     @Test
     @org.testng.annotations.Test
+    @JiraId("KAN-5")
     public void loginTest() {
         String testCaseId = "KAN-5";
         JiraIntegration.updateTestStatus("Running", testCaseId, "Test execution started.");

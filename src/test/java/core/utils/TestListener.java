@@ -1,17 +1,28 @@
 package core.utils;
 
+import core.annotations.JiraId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import java.util.Objects;
+
 public class TestListener implements ITestListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestListener.class);
 
     @Override
     public void onTestStart(ITestResult result) {
-        LOGGER.info("Test Started: {}", result.getMethod().getMethodName());
+        var methodName = result.getMethod().getMethodName();
+        LOGGER.info("Test Started: {}", methodName);
+        var jiraIdAnnotation = result.getMethod().getConstructorOrMethod().getMethod().getAnnotation(JiraId.class);
+        //if no annotation -> no Jira integration
+        if(Objects.isNull(jiraIdAnnotation)){
+            return;
+        }
+        var testCaseId = jiraIdAnnotation.value();
+        JiraIntegration.updateTestStatus("Running", testCaseId, String.format("Test execution of the '%s' method is started.", methodName));
     }
 
     @Override

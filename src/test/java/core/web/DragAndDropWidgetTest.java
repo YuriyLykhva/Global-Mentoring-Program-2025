@@ -1,5 +1,6 @@
 package core.web;
 
+import core.annotations.JiraId;
 import core.driver.WebDriverHolder;
 import core.model.User;
 import core.utils.JiraIntegration;
@@ -17,6 +18,7 @@ public class DragAndDropWidgetTest extends BaseWebTest {
 
     @Test
     @org.testng.annotations.Test
+    @JiraId(value = "KAN-4")
     public void dragAndDropWidgetTest() {
         String testCaseId = "KAN-4";
         JiraIntegration.updateTestStatus("Running", testCaseId, "Test execution started.");
