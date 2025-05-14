@@ -40,8 +40,14 @@
         <cucumber.version>7.21.1</cucumber.version>
         <okhttp.version>4.12.0</okhttp.version>
         <vavr.version>0.10.4</vavr.version>
+
         <jacoco.version>0.8.12</jacoco.version>
         <json.version>20250107</json.version>
+
+        <rp.version>5.3.11</rp.version>
+        <rp.testng.version>5.4.6</rp.testng.version>
+        <rp.junit.version>5.3.5</rp.junit.version>
+        <rp.log.version>5.2.3</rp.log.version>
     </properties>
 
     <dependencies>
@@ -186,6 +192,31 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>client-java</artifactId>
+            <version>${rp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>agent-java-testng</artifactId>
+            <version>${rp.testng.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>agent-java-junit5</artifactId>
+            <version>${rp.junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>logger-java-log4j</artifactId>
+            <version>${rp.log.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.epam.reportportal</groupId>
+            <artifactId>logger-java-logback</artifactId>
+            <version>${rp.log.version}</version>
         </dependency>
     </dependencies>
 
