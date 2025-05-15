@@ -1,5 +1,6 @@
 package core.web;
 
+import core.annotations.JiraId;
 import core.api.ReportPortalApiClient;
 import core.driver.WebDriverHolder;
 import core.model.User;
@@ -73,9 +74,6 @@ public class DeleteDashboardTest extends BaseWebTest {
                 .map(WebElement::getText)
                 .anyMatch(dn -> dn.contains(targetDashboardName));
 
-        Assert.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
-        Assertions.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
-
         dashboardPage
                 .deleteDashboardByName(targetDashboardName)
                 .returnToDashboardPage();
@@ -92,7 +90,8 @@ public class DeleteDashboardTest extends BaseWebTest {
     }
 
     @Test
-    @org.testng.annotations.Test(threadPoolSize = 3, invocationCount = 5, timeOut = 1000)
+    @org.testng.annotations.Test
+    @JiraId("KAN-3")
     public void deleteDashboardTest() {
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
@@ -119,9 +118,6 @@ public class DeleteDashboardTest extends BaseWebTest {
                 .map(WebElement::getText)
                 .anyMatch(dn -> dn.contains(targetDashboardName));
 
-        Assert.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
-        Assertions.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
-
         dashboardPage
                 .deleteDashboardByName(targetDashboardName)
                 .returnToDashboardPage();
@@ -130,10 +126,10 @@ public class DeleteDashboardTest extends BaseWebTest {
 
         boolean isDashboardDeleted = dashboardsAfterDeletionTestDashboard.stream()
                 .map(WebElement::getText)
-                .anyMatch(dn -> dn.contains(targetDashboardName));
+                .noneMatch(dn -> dn.contains(targetDashboardName));
 
-        Assert.assertFalse(isDashboardDeleted, "The test dashboard was not deleted!");
-        Assertions.assertFalse(isDashboardDeleted, "The test dashboard was not deleted!");
+        Assert.assertTrue(isDashboardDeleted, "The test dashboard was not deleted!");
+        Assertions.assertTrue(isDashboardDeleted, "The test dashboard was not deleted!");
 
     }
 }

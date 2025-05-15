@@ -1,5 +1,6 @@
 package core.web;
 
+import core.annotations.JiraId;
 import core.driver.WebDriverHolder;
 import core.model.User;
 import core.utils.RandomStringGenerator;
@@ -16,6 +17,7 @@ public class AddDashboardTest extends BaseWebTest {
 
     @Test
     @org.testng.annotations.Test
+    @JiraId("KAN-2")
     public void addDashboardTest() {
         User user = User.createUser();
         LoginPage loginPage = new LoginPage(WebDriverHolder.getInstance().getWebDriver());
@@ -47,5 +49,4 @@ public class AddDashboardTest extends BaseWebTest {
         Assert.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
         Assertions.assertTrue(isDashboardCreated, "The new dashboard was not found in the list!");
     }
-
 }

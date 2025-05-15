@@ -1,5 +1,6 @@
 package core.web;
 
+import core.annotations.JiraId;
 import core.driver.WebDriverHolder;
 import core.model.User;
 import core.web.pageObjects.AllDashboardsPage;
@@ -16,6 +17,7 @@ public class DragAndDropWidgetTest extends BaseWebTest {
 
     @Test
     @org.testng.annotations.Test
+    @JiraId(value = "KAN-4")
     public void dragAndDropWidgetTest() {
         int xOffset = 340;
         User user = User.createUser();
@@ -38,7 +40,7 @@ public class DragAndDropWidgetTest extends BaseWebTest {
         LOGGER.info("Widget is moved to the right on {} px", xOffset);
 
         boolean isMoved = dashboardPage.isWidgetMovedSuccessfully(initialPos.getX(), initialPos.getY());
-        Assertions.assertTrue(isMoved, "Widget was not moved successfully!");
+        Assertions.assertTrue(isMoved, "Widget was not moved!");
 
         dashboardPage.dragWidgetByOffset(-xOffset, 0);
         LOGGER.info("Widget is moved to the left on {} px", xOffset);

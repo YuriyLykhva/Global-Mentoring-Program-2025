@@ -65,4 +65,19 @@ public interface ConfigProperties extends Config {
     String remoteAccessKey();
     @Key("platform")
     String platform();
+
+    //slack props
+    @Key("slack.key")
+    String slackKey();
+    @Key("slack.baseWebHookUrl")
+    String slackBaseWebHookUrl();
+
+
+    //jira props
+    @Key("jira.key")
+    String jiraKey();
+    @Key("jira.url")
+    String jiraUrl();
+    @Key("jira.username")
+    String jiraUsername();
 }

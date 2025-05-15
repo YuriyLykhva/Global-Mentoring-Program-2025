@@ -1,6 +1,7 @@
 package core.api.api_client;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.slf4j.Logger;
@@ -15,20 +16,20 @@ public class RestAssuredApiClient implements IApiClient {
     }
 
     public CustomResponse post(String url, Object requestBody) {
-        return handleResponse(requestSpecification.body(requestBody).when().post(url));
+        return handleResponse(RestAssured.given(new RequestSpecBuilder().addRequestSpecification(requestSpecification).build()).body(requestBody).when().post(url));
     }
 
     public CustomResponse put(String url, Object requestBody) {
-        return handleResponse(requestSpecification.body(requestBody).when()
+        return handleResponse(RestAssured.given(new RequestSpecBuilder().addRequestSpecification(requestSpecification).build()).body(requestBody).when()
                 .put(url));
     }
 
     public CustomResponse get(String url) {
-        return handleResponse(requestSpecification.when().get(url));
+        return handleResponse(RestAssured.given(new RequestSpecBuilder().addRequestSpecification(requestSpecification).build()).when().get(url));
     }
 
     public CustomResponse delete(String url) {
-        return handleResponse(requestSpecification.when().delete(url));
+        return handleResponse(RestAssured.given(new RequestSpecBuilder().addRequestSpecification(requestSpecification).build()).when().delete(url));
     }
 
     private RequestSpecification handleRequest(RequestSpecification requestSpecification) {
