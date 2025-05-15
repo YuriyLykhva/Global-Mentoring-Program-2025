@@ -1,44 +1,50 @@
 package core.utils;
 
+import core.api.api_client.CustomRequestData;
+import core.api.api_client.IApiClient;
+import core.api.api_client.OkHttpApiClient;
+import core.api.api_client.RestAssuredApiClient;
+import core.config.ConfigProperties;
 import core.config.PropertiesHolder;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import core.meta.HttpClientType;
+import core.model.SlackMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.util.Map;
 
 public class SlackService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SlackService.class);
+    private static final String slackKey;
+    private static final String slackBaseUrl;
+    private final IApiClient apiClient;
 
-    private final OkHttpClient client;
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
-    public SlackService() {
-        this.client = new OkHttpClient();
+    static {
+        ConfigProperties config = PropertiesHolder.getInstance().getConfigProperties();
+        slackKey = config.slackKey();
+        slackBaseUrl = config.slackBaseWebHookUrl();
     }
 
-    public void postNotification(String message) throws IOException {
-        String json = String.format("{\"text\":\"%s\"}", message);
-        String slackKey = PropertiesHolder.getInstance().getConfigProperties().slackKey();
+    public SlackService() {
+        ConfigProperties configProperties = PropertiesHolder.getInstance().getConfigProperties();
+        HttpClientType clientType = configProperties.httpClientType();
+        CustomRequestData customRequestData = new CustomRequestData();
+        customRequestData.setBaseUri(slackBaseUrl + "/services/");
+        customRequestData.setHeaders(Map.of(
+                "Content-Type", "application/json",
+                "Charset", "utf-8"
+        ));
 
-        RequestBody body = RequestBody.create(json, JSON);
+        LOGGER.info("Initializing SlackService with HTTP client: {}", clientType);
 
-        String webhookUrl = "https://hooks.slack.com/services/" + slackKey;
-        Request request = new Request.Builder()
-                .url(webhookUrl)
-                .post(body)
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                LOGGER.info("Failed to send Slack notification: {}", response);
-                throw new IOException("Failed to send Slack notification: " + response);
-            }
+        switch (clientType) {
+            case REST_ASSURED -> apiClient = new RestAssuredApiClient(customRequestData);
+            case OK_HTTP -> apiClient = new OkHttpApiClient(customRequestData);
+            default -> throw new IllegalArgumentException("Unsupported http client type: " + clientType);
         }
+    }
 
+    public void postNotification(String message) {
+        apiClient.post(slackKey, new SlackMessage(message));
     }
 }

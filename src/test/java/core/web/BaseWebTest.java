@@ -21,7 +21,6 @@ public class BaseWebTest extends BaseTest {
     protected final BrowserActions browserActions;
     private final ReportPortalApiClient reportPortalApiClient = new ReportPortalApiClient();
     protected final ThreadLocal<String> createdDashboard = new ThreadLocal<>();
-    protected String testCaseId;
 
     private final boolean useSelenide;
 

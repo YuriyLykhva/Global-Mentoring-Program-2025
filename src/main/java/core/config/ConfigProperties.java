@@ -69,8 +69,15 @@ public interface ConfigProperties extends Config {
     //slack props
     @Key("slack.key")
     String slackKey();
+    @Key("slack.baseWebHookUrl")
+    String slackBaseWebHookUrl();
+
 
     //jira props
     @Key("jira.key")
     String jiraKey();
+    @Key("jira.url")
+    String jiraUrl();
+    @Key("jira.username")
+    String jiraUsername();
 }
